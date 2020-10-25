@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
 });
 
 // delete account
-router.delete("/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
   try {
     const removedAccount = await Account.deleteOne({ _id: req.params.id });
     res.json({ msg: "Account Removed Successfully" });
@@ -67,5 +67,35 @@ router.delete("/:id", async (req, res) => {
   }
 });
 // update account
+
+router.patch("/edit/:id", async (req, res) => {
+  const accountExists = await Account.findById(req.params.id);
+  try {
+    if (!accountExists)
+      return res.status(404).json({ msg: "account not found" });
+
+    const { username, password } = req.body;
+
+    if (username != null) {
+      accountExists.username = username;
+    }
+
+    if (password != null) {
+      //Hashing and Salting Password
+      bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, (err, hash) => {
+          if (err) throw err;
+          accountExists.password = hash;
+          accountExists
+            .save()
+            .then(res.json(accountExists))
+            .catch((err) => console.error(err));
+        });
+      });
+    }
+  } catch (error) {
+    res.status(404).json({ msg: error.message });
+  }
+});
 
 module.exports = router;
