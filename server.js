@@ -6,10 +6,18 @@ const cors = require("cors");
 
 const app = express();
 
+const passport = require("passport");
+
 require("dotenv").config();
 
 //Config Keys
 // const db = require("./config/keys").mongoURI;
+
+//Passport Middleware
+
+app.use(passport.initialize());
+
+require("./config/passport")(passport);
 
 //middleWares
 app.use(cors());
@@ -20,11 +28,13 @@ app.use(express.json());
 
 const members = require("./routes/api/members");
 const accounts = require("./routes/api/accounts");
+const councils = require("./routes/api/councils");
 
 // Use Routes
 
 app.use("/api/accounts", accounts);
 app.use("/api/members", members);
+app.use("/api/councils", councils);
 
 // variables
 const PORT = process.env.PORT;

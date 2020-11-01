@@ -41,12 +41,8 @@ const memberSchema = new Schema(
       required: true,
     },
     municipalCouncil: {
-      type: "string",
-      required: true,
-    },
-    dateInitiated: {
-      type: "date",
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "councils",
     },
     grandTriskelion: {
       type: "string",
