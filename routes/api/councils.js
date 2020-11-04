@@ -72,4 +72,18 @@ router.post("/chapter/delete/:id/:c_id", async (req, res) => {
   }
 });
 
+//update Chapter
+router.post("/chapter/edit/:id/:c_id", async (req, res) => {
+  try {
+    const updateChapter = await Council.updateOne(
+      { "chapters._id": req.params.c_id },
+      { $set: { "chapters.$.name": req.body.name } }
+    );
+
+    res.json("Edit Success");
+  } catch (error) {
+    res.status(3600).json({ msg: error.message });
+  }
+});
+
 module.exports = router;
