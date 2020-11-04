@@ -42,7 +42,11 @@ const URI = process.env.URI;
 
 // DB Connection
 mongoose
-  .connect(URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+  })
   .then(console.log("Database Connected"))
   .catch((err) => console.error(err));
 

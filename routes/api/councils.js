@@ -13,6 +13,12 @@ router.get("/", async (req, res) => {
   }
 });
 
+//single council
+router.get("/:id", async (req, res) => {
+  const found = await Council.find({ _id: req.params.id }).populate();
+  res.json(found);
+});
+
 router.post("/add", async (req, res) => {
   try {
     const councils = new Council({
@@ -37,4 +43,33 @@ router.delete("/delete/:id", async (req, res) => {
     res.status(404).json({ msg: error.message });
   }
 });
+
+//add chapter
+router.post("/chapter/add/:id", async (req, res) => {
+  try {
+    const addChapter = await Council.findOneAndUpdate(
+      { _id: req.params.id },
+      { $push: { chapters: { name: req.body.name } } }
+    );
+
+    res.json(addChapter);
+  } catch (error) {
+    res.status(3600).json({ msg: error.message });
+  }
+});
+
+//remove chapter
+router.post("/chapter/delete/:id/:c_id", async (req, res) => {
+  try {
+    const removeChapter = await Council.findOneAndUpdate(
+      { _id: req.params.id },
+      { $pull: { chapters: { _id: req.params.c_id } } }
+    );
+
+    res.json("Removed Successfully");
+  } catch (error) {
+    res.status(3600).json({ msg: error.message });
+  }
+});
+
 module.exports = router;
