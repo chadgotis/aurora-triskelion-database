@@ -60,6 +60,10 @@ const memberSchema = new Schema(
       type: "string",
       required: true,
     },
+    t_id: {
+      type: "string",
+      required: true,
+    },
   },
   {
     timestamps: true,

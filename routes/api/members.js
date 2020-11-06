@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Member = require("../../models/Member");
+const Council = require("../../models/Council");
 
 // get all members
 router.get("/", async (req, res) => {
@@ -45,6 +46,15 @@ router.post("/add", async (req, res) => {
       alias,
     } = req.body;
 
+    const council = await Council.findById(municipalCouncil);
+
+    if (!council)
+      return res.status(404).json({ msg: "Council does not exist" });
+
+    const randomId = Math.floor(Math.random() * 8999999 + 1000000);
+
+    const unique = `${council.code}-${randomId}`;
+
     const member = new Member({
       firstName,
       lastName,
@@ -60,6 +70,7 @@ router.post("/add", async (req, res) => {
       masterInitiator,
       batchName,
       alias,
+      t_id: unique,
     });
 
     const newMember = await member.save();

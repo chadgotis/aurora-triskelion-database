@@ -82,7 +82,71 @@ router.post("/chapter/edit/:id/:c_id", async (req, res) => {
 
     res.json("Edit Success");
   } catch (error) {
-    res.status(3600).json({ msg: error.message });
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+//Edit council officers
+router.post("/officers/edit/:id", async (req, res) => {
+  try {
+    const {
+      chairman,
+      viceChairman,
+      secretary,
+      keeperOftheChest,
+      auditor,
+      budgetAndFinance,
+      membershipAndOrganization,
+      communicationAndInformation,
+      specialProjects,
+      alumniAffairs,
+      interior,
+    } = req.body;
+
+    const editOfficer = await Council.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        officers: {
+          chairman,
+          viceChairman,
+          secretary,
+          keeperOftheChest,
+          auditor,
+          budgetAndFinance,
+          membershipAndOrganization,
+          communicationAndInformation,
+          specialProjects,
+          alumniAffairs,
+          interior,
+        },
+      }
+    );
+
+    res.json(editOfficer);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+//Edit Chapter Officers
+router.post("/chapter/officers/edit/:id/:c_id", async (req, res) => {
+  try {
+    const updateChapter = await Council.updateOne(
+      { "chapters._id": req.params.c_id },
+      {
+        $set: {
+          "chapters.$.officers.grandTriskelion": req.body.grandTriskelion,
+          "chapters.$.officers.deputyGrandTriskelion":
+            req.body.deputyGrandTriskelion,
+          "chapters.$.officers.masterWilderOfTheWhip":
+            req.body.masterWilderOfTheWhip,
+        },
+      }
+    );
+
+    res.json("Edit Success");
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
   }
 });
 
