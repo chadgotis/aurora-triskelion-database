@@ -29,12 +29,14 @@ app.use(express.json());
 const members = require("./routes/api/members");
 const accounts = require("./routes/api/accounts");
 const councils = require("./routes/api/councils");
+const logEvents = require("./routes/api/logEvents");
 
 // Use Routes
 
 app.use("/api/accounts", accounts);
 app.use("/api/members", members);
 app.use("/api/councils", councils);
+app.use("/api/logs", logEvents);
 
 // variables
 const PORT = process.env.PORT;
@@ -49,5 +51,6 @@ mongoose
   })
   .then(console.log("Database Connected"))
   .catch((err) => console.error(err));
+mongoose.set("useCreateIndex", true);
 
 app.listen(PORT, () => console.log(`Up and running at port ${PORT}`));
