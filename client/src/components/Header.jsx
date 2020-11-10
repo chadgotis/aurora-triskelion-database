@@ -15,7 +15,7 @@ const Header = () => {
           {loggedIn ? (
             <Navbar.Collapse id="basic-navbar-nav">
               <Nav className="ml-auto">
-                <LinkContainer to="#">
+                <LinkContainer to="/management">
                   <Nav.Link>
                     <i className="fas fa-tasks"></i> Management
                   </Nav.Link>
