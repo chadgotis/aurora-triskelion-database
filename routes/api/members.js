@@ -5,6 +5,9 @@ const Council = require("../../models/Council");
 const passport = require("passport");
 const LogEvent = require("../../models/LogEvent");
 
+//Load Validation
+const validateMemberInput = require("../../validation/member");
+
 // get all members
 router.get(
   "/",
@@ -43,6 +46,12 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
+      const { errors, isValid } = validateMemberInput(req.body);
+
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
       const {
         firstName,
         lastName,

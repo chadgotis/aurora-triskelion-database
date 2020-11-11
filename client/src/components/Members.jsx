@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Col, Button, Modal } from "react-bootstrap";
+import { Col, Button } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
+import AddMember from "./AddMember";
 import axios from "axios";
 
 const { SearchBar } = Search;
@@ -45,20 +46,7 @@ const Members = () => {
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
-      </Modal>
+      <AddMember show={show} handleClose={handleClose} />
       <Col className="mb-3">
         <ToolkitProvider
           bootstrap4
@@ -75,7 +63,7 @@ const Members = () => {
                 </Button>
               </div>
               <div className="float-right">
-                <SearchBar {...props.searchProps} />
+                <SearchBar {...props.searchProps} placeholder="Search ..." />
               </div>
               <BootstrapTable
                 striped

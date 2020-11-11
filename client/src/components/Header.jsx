@@ -20,23 +20,23 @@ const Header = () => {
                     <i className="fas fa-tasks"></i> Management
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="#">
+                <LinkContainer to="/reports">
                   <Nav.Link>
                     <i className="fas fa-flag"></i> Reports
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="#">
+                <LinkContainer to="/settings">
                   <Nav.Link>
                     <i className="fas fa-cogs"></i> System Settings
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="#">
+                <LinkContainer to="/about">
                   <Nav.Link>
                     <i className="fas fa-info-circle"></i> About
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer to="#">
-                  <Nav.Link href="#">
+                <LinkContainer to="/" exact>
+                  <Nav.Link>
                     <i className="fas fa-sign-out-alt"></i> Logout
                   </Nav.Link>
                 </LinkContainer>

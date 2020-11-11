@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Row, Form, Col, Button, Image } from "react-bootstrap";
 import logo1 from "../assets/TGP.jpeg";
 import logo2 from "../assets/APC.jpg";
 import logo3 from "../assets/TGS.jpeg";
 
 const Login = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    const credentials = {
+      username,
+      password,
+    };
+    console.log(credentials);
+  };
+
   return (
     <div className="login">
       <Row className="py-4 d-flex flex-column justify-content-center align-content-center">
@@ -42,18 +54,29 @@ const Login = () => {
           <Form>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="email" placeholder="Enter username" />
+              <Form.Control
+                type="text"
+                placeholder="Enter username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+              />
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Enter Password" />
+              <Form.Control
+                type="password"
+                placeholder="Enter Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </Form.Group>
             <Button
               variant="secondary"
               type="submit"
               className="text-center mt-4"
               block
+              onClick={submitHandler}
             >
               Submit
             </Button>
