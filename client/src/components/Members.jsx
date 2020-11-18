@@ -107,6 +107,7 @@ const Members = () => {
                     striped
                     hover
                     pagination={paginationFactory()}
+                    bordered={false}
                     {...props.baseProps}
                   />
                 </div>

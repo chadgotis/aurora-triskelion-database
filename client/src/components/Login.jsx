@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Row, Form, Col, Button, Image } from "react-bootstrap";
+import { Row, Form, Col, Button, Image, Alert } from "react-bootstrap";
 import logo1 from "../assets/TGP.jpeg";
 import logo2 from "../assets/APC.jpg";
 import logo3 from "../assets/TGS.jpeg";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../actions/authActions";
+import { Redirect } from "react-router-dom";
 
 import classnames from "classnames";
 
@@ -14,7 +15,7 @@ const Login = ({ history }) => {
   const dispatch = useDispatch();
 
   const errors = useSelector((state) => state.errors);
-  // const isAuth = useSelector((state) => state.auth.isAuthenticated);
+  const isAuth = useSelector((state) => state.auth.isAuthenticated);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -24,6 +25,9 @@ const Login = ({ history }) => {
     };
     dispatch(loginUser(credentials, history));
   };
+  if (isAuth) {
+    return <Redirect to="/dashboard" />;
+  }
 
   return (
     <div className="login">
@@ -59,7 +63,11 @@ const Login = ({ history }) => {
               />
             </Col>
           </Row>
-          {errors.message && errors.message}
+          {errors.message && (
+            <Alert variant="danger" className="mt-3">
+              {errors.message}
+            </Alert>
+          )}
           <Form>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>

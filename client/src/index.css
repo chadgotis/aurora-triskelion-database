@@ -4,7 +4,9 @@ main {
 .logo {
   width: 100px;
 }
-
+.react-bootstrap-table table {
+  table-layout: auto;
+}
 /* #wrapper {
   overflow-x: hidden;
 }

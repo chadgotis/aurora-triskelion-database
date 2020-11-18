@@ -39,15 +39,9 @@ const Header = () => {
                     <i className="fas fa-info-circle"></i> About
                   </Nav.Link>
                 </LinkContainer>
-                <LinkContainer
-                  to="/"
-                  exact
-                  onClick={() => dispatch(logoutUser())}
-                >
-                  <Nav.Link>
-                    <i className="fas fa-sign-out-alt"></i> Logout
-                  </Nav.Link>
-                </LinkContainer>
+                <Nav.Link onClick={() => dispatch(logoutUser())}>
+                  <i className="fas fa-sign-out-alt"></i> Logout
+                </Nav.Link>
               </Nav>
             </Navbar.Collapse>
           )}

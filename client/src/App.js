@@ -13,6 +13,10 @@ import Footer from "./components/Footer";
 import Login from "./components/Login";
 import Dashboard from "./pages/Dashboard";
 import Management from "./pages/Management";
+import Reports from "./pages/Reports";
+import NotFound from "./pages/NotFound";
+import About from "./pages/About";
+import Settings from "./pages/Settings";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 if (localStorage.jwtToken) {
@@ -40,10 +44,15 @@ const App = () => {
         <Header />
         <main>
           <Container>
-            <Route path="/" exact component={Login} />
             <Switch>
+              <Route path="/" exact component={Login} />
               <PrivateRoute path="/dashboard" exact component={Dashboard} />
               <PrivateRoute path="/management" exact component={Management} />
+              <PrivateRoute path="/reports" exact component={Reports} />
+              <PrivateRoute path="/about" exact component={About} />
+              <PrivateRoute path="/settings" exact component={Settings} />
+              {/* 404 Not Found */}
+              <Route component={NotFound} />
             </Switch>
           </Container>
         </main>

@@ -3,6 +3,9 @@ import {
   LOGIN_FAIL,
   LOGIN_SUCCESS,
 } from "../constants/authConstants";
+
+import Swal from "sweetalert2";
+
 import { GET_ERRORS, CLEAR_ERRORS } from "../constants/errorConstants";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "../utils/setAuthToken";
@@ -48,12 +51,23 @@ export const setCurrentUser = (decoded) => {
 };
 
 export const logoutUser = () => (dispatch) => {
-  // Remove from localStorage
-  localStorage.removeItem("jwtToken");
+  Swal.fire({
+    title: "Are you sure to logout?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Logout",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Remove from localStorage
+      localStorage.removeItem("jwtToken");
 
-  //Remove Auth header
-  setAuthToken(false);
+      //Remove Auth header
+      setAuthToken(false);
 
-  //set current user to empty object
-  dispatch(setCurrentUser({}));
+      //set current user to empty object
+      dispatch(setCurrentUser({}));
+    }
+  });
 };
