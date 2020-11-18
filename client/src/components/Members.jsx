@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Col, Button } from "react-bootstrap";
+import { Col, Button, Spinner } from "react-bootstrap";
 import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import ToolkitProvider, { Search } from "react-bootstrap-table2-toolkit";
 import AddMember from "./AddMember";
+import MemberButtons from "../components/MemberButtons";
 import { listMembers } from "../actions/memberActions";
 
 import { useDispatch, useSelector } from "react-redux";
@@ -62,14 +63,20 @@ const Members = () => {
       dataField: "actions",
       text: "Actions",
       isDummyField: true,
-      formatter: (cell, row) => <p>add</p>,
+      formatter: (cell, row) => <MemberButtons />,
     },
   ];
 
   return (
     <>
       {loading ? (
-        <h2>Loading...</h2>
+        <Col>
+          <Spinner
+            animation="border"
+            style={{ margin: "auto", display: "block" }}
+            className="my-3"
+          />
+        </Col>
       ) : error ? (
         <h2>Error</h2>
       ) : (

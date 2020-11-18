@@ -3,10 +3,18 @@ import { Row, Form, Col, Button, Image } from "react-bootstrap";
 import logo1 from "../assets/TGP.jpeg";
 import logo2 from "../assets/APC.jpg";
 import logo3 from "../assets/TGS.jpeg";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../actions/authActions";
 
-const Login = () => {
+import classnames from "classnames";
+
+const Login = ({ history }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+
+  const errors = useSelector((state) => state.errors);
+  // const isAuth = useSelector((state) => state.auth.isAuthenticated);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -14,7 +22,7 @@ const Login = () => {
       username,
       password,
     };
-    console.log(credentials);
+    dispatch(loginUser(credentials, history));
   };
 
   return (
@@ -51,6 +59,7 @@ const Login = () => {
               />
             </Col>
           </Row>
+          {errors.message && errors.message}
           <Form>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Username</Form.Label>
@@ -59,7 +68,13 @@ const Login = () => {
                 placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
+                className={classnames({ "is-invalid": errors.username })}
               />
+              {errors.username && (
+                <Form.Control.Feedback type="invalid">
+                  {errors.username}
+                </Form.Control.Feedback>
+              )}
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
@@ -69,7 +84,13 @@ const Login = () => {
                 placeholder="Enter Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                className={classnames({ "is-invalid": errors.password })}
               />
+              {errors.password && (
+                <Form.Control.Feedback type="invalid">
+                  {errors.password}
+                </Form.Control.Feedback>
+              )}
             </Form.Group>
             <Button
               variant="secondary"

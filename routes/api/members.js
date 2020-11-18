@@ -9,14 +9,18 @@ const LogEvent = require("../../models/LogEvent");
 const validateMemberInput = require("../../validation/member");
 
 // get all members
-router.get("/", async (req, res) => {
-  const members = await Member.find().populate("municipalCouncil");
-  try {
-    res.json(members);
-  } catch (error) {
-    res.status(500).json({ msg: error.message });
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const members = await Member.find().populate("municipalCouncil");
+    try {
+      res.json(members);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
   }
-});
+);
 
 // get single Member
 router.get(
@@ -37,71 +41,75 @@ router.get(
 );
 
 // Add member
-router.post("/add", async (req, res) => {
-  try {
-    const { errors, isValid } = validateMemberInput(req.body);
+router.post(
+  "/add",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const { errors, isValid } = validateMemberInput(req.body);
 
-    if (!isValid) {
-      return res.status(400).json(errors);
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
+
+      const {
+        firstName,
+        lastName,
+        middleName,
+        sex,
+        birthDate,
+        homeAddress,
+        triskelionBirth,
+        triskelionSponsor,
+        rootChapter,
+        municipalCouncil,
+        grandTriskelion,
+        masterInitiator,
+        batchName,
+        alias,
+      } = req.body;
+
+      const council = await Council.findById(municipalCouncil);
+
+      if (!council)
+        return res.status(404).json({ msg: "Council does not exist" });
+
+      const randomId = Math.floor(Math.random() * 8999999 + 1000000);
+
+      const unique = `${council.code}-${randomId}`;
+
+      const member = new Member({
+        firstName,
+        lastName,
+        middleName,
+        sex,
+        birthDate,
+        homeAddress,
+        triskelionBirth,
+        triskelionSponsor,
+        rootChapter,
+        municipalCouncil,
+        grandTriskelion,
+        masterInitiator,
+        batchName,
+        alias,
+        t_id: unique,
+      });
+
+      const recordEvent = new LogEvent({
+        user: `${req.user.firstName} ${req.user.middleName} ${req.user.lastName}`,
+        activity: "Added new Member to Database",
+      });
+
+      const newLog = await recordEvent.save();
+      const newMember = await member.save();
+
+      res.json(newMember);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
     }
-
-    const {
-      firstName,
-      lastName,
-      middleName,
-      sex,
-      birthDate,
-      homeAddress,
-      triskelionBirth,
-      triskelionSponsor,
-      rootChapter,
-      municipalCouncil,
-      grandTriskelion,
-      masterInitiator,
-      batchName,
-      alias,
-    } = req.body;
-
-    const council = await Council.findById(municipalCouncil);
-
-    if (!council)
-      return res.status(404).json({ msg: "Council does not exist" });
-
-    const randomId = Math.floor(Math.random() * 8999999 + 1000000);
-
-    const unique = `${council.code}-${randomId}`;
-
-    const member = new Member({
-      firstName,
-      lastName,
-      middleName,
-      sex,
-      birthDate,
-      homeAddress,
-      triskelionBirth,
-      triskelionSponsor,
-      rootChapter,
-      municipalCouncil,
-      grandTriskelion,
-      masterInitiator,
-      batchName,
-      alias,
-      t_id: unique,
-    });
-
-    const recordEvent = new LogEvent({
-      user: `${req.user.firstName} ${req.user.middleName} ${req.user.lastName}`,
-      activity: "Added new Member to Database",
-    });
-
-    const newLog = await recordEvent.save();
-    const newMember = await member.save();
-
-    res.json(newMember);
-  } catch (error) {
-    res.status(500).json({ msg: error.message });
   }
-});
+);
 
 // Edit Members
 

@@ -94,19 +94,20 @@ router.post("/login", async (req, res) => {
     }
 
     //create JWT Payload
-    const payload = { id: userExist.id, username: userExist.username };
+    const payload = {
+      id: userExist.id,
+      username: userExist.username,
+      firstName: userExist.firstName,
+      lastName: userExist.lastName,
+      role: userExist.type,
+    };
 
-    jwt.sign(
-      payload,
-      keys.secretOrKey,
-      { expiresIn: 21600 },
-      (error, token) => {
-        res.json({
-          success: true,
-          token: `Bearer ${token}`,
-        });
-      }
-    );
+    jwt.sign(payload, keys.secretOrKey, { expiresIn: 3600 }, (error, token) => {
+      res.json({
+        success: true,
+        token: `Bearer ${token}`,
+      });
+    });
   } catch (error) {
     res.status(500).json({ msg: error });
   }
