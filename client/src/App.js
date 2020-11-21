@@ -1,7 +1,7 @@
 import React from "react";
 
 import setAuthToken from "./utils/setAuthToken";
-import { logoutUser, setCurrentUser } from "./actions/authActions";
+import { forceLogout, setCurrentUser } from "./actions/authActions";
 import jwt_decode from "jwt-decode";
 import store from "./store";
 
@@ -31,7 +31,7 @@ if (localStorage.jwtToken) {
   const currentTime = Date.now() / 1000;
   if (decoded.exp < currentTime) {
     //Logouut user
-    store.dispatch(logoutUser());
+    store.dispatch(forceLogout());
 
     //Redirect
     window.location.href = "/";

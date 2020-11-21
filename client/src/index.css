@@ -6,6 +6,14 @@ main {
 }
 .react-bootstrap-table table {
   table-layout: auto;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.react-bootstrap-table table td {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 /* #wrapper {
   overflow-x: hidden;

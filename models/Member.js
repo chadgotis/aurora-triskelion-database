@@ -21,7 +21,7 @@ const memberSchema = new Schema(
       required: true,
     },
     birthDate: {
-      type: "date",
+      type: "string",
       required: true,
     },
     homeAddress: {

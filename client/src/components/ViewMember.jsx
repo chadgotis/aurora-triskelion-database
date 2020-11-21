@@ -1,31 +1,55 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  ButtonGroup,
+  OverlayTrigger,
+  Tooltip,
+} from "react-bootstrap";
 import classnames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
-import { addMember } from "../actions/memberActions";
 import { councilAction, getSingleCouncil } from "../actions/councilActions";
 
-const MemberForm = ({ handleClose }) => {
+const ViewMember = ({ handleClose, values }) => {
   const dispatch = useDispatch();
 
+  const {
+    firstName,
+    middleName,
+    lastName,
+    sex,
+    birthDate,
+    homeAddress,
+    triskelionBirth,
+    triskelionSponsor,
+    municipalCouncil,
+    rootChapter,
+    grandTriskelion,
+    masterInitiator,
+    batchName,
+    alias,
+  } = values;
   const errors = useSelector((state) => state.errors);
   const councilList = useSelector((state) => state.councilList);
+  const [edit, setEdit] = useState(false);
 
   const [member, setMember] = useState({
-    firstName: "",
-    middleName: "",
-    lastName: "",
-    sex: "",
-    birthDate: "",
-    homeAddress: "",
-    triskelionBirth: "",
-    triskelionSponsor: "",
-    municipalCouncil: "",
-    rootChapter: "",
-    grandTriskelion: "",
-    masterInitiator: "",
-    batchName: "",
-    alias: "",
+    firstName,
+    middleName,
+    lastName,
+    sex,
+    birthDate,
+    homeAddress,
+    triskelionBirth,
+    triskelionSponsor,
+    municipalCouncil,
+    rootChapter,
+    grandTriskelion,
+    masterInitiator,
+    batchName,
+    alias,
   });
 
   const submitHandler = (e) => {
@@ -47,18 +71,38 @@ const MemberForm = ({ handleClose }) => {
       alias: member.alias,
     };
 
-    dispatch(addMember(newMember, handleClose));
+    // dispatch(addMember(newMember, handleClose));
+    console.log(newMember);
   };
 
   useEffect(() => {
     dispatch(councilAction());
-    dispatch(getSingleCouncil(member.municipalCouncil));
-  }, [dispatch, member.municipalCouncil]);
-
+    dispatch(getSingleCouncil(values.municipalCouncil._id));
+  }, [dispatch, values.municipalCouncil._id]);
   return (
     <>
       <Form>
-        <h3>Personal Information</h3>
+        <Row>
+          <Col lg={3}>
+            <ButtonGroup className="float-right" size="sm">
+              <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
+                <Button variant="warning" onClick={() => setEdit(true)}>
+                  {" "}
+                  <i className="fas fa-edit"></i>Edit
+                </Button>
+              </OverlayTrigger>
+              <OverlayTrigger overlay={<Tooltip>Print COL</Tooltip>}>
+                <Button variant="primary">
+                  {" "}
+                  <i className="fas fa-print"></i>Print COL
+                </Button>
+              </OverlayTrigger>
+            </ButtonGroup>
+          </Col>
+          <Col lg={7}>
+            <h3>Personal Information</h3>
+          </Col>
+        </Row>
         <Form.Group>
           <Form.Label>First Name</Form.Label>
           <Form.Control
@@ -68,6 +112,7 @@ const MemberForm = ({ handleClose }) => {
             onChange={(e) =>
               setMember({ ...member, firstName: e.target.value })
             }
+            readOnly={edit ? false : true}
             className={classnames({ "is-invalid": errors.firstName })}
           />
           {errors.firstName && (
@@ -82,6 +127,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Middle Name"
             value={member.middleName}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, middleName: e.target.value })
             }
@@ -99,6 +145,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Last Name"
             value={member.lastName}
+            readOnly={edit ? false : true}
             onChange={(e) => setMember({ ...member, lastName: e.target.value })}
             className={classnames({ "is-invalid": errors.lastName })}
           />
@@ -114,6 +161,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Home Address"
             value={member.homeAddress}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, homeAddress: e.target.value })
             }
@@ -130,6 +178,7 @@ const MemberForm = ({ handleClose }) => {
           <Form.Control
             as="select"
             value={member.sex}
+            readOnly={edit ? false : true}
             onChange={(e) => setMember({ ...member, sex: e.target.value })}
             className={classnames({ "is-invalid": errors.sex })}
           >
@@ -150,6 +199,7 @@ const MemberForm = ({ handleClose }) => {
             name="dob"
             placeholder="Date of Birth"
             value={member.birthDate}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, birthDate: e.target.value })
             }
@@ -168,6 +218,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Triskelion Sponsor"
             value={member.triskelionSponsor}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, triskelionSponsor: e.target.value })
             }
@@ -186,6 +237,7 @@ const MemberForm = ({ handleClose }) => {
             name="tb"
             placeholder="Triskelion Birth"
             value={member.triskelionBirth}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, triskelionBirth: e.target.value })
             }
@@ -202,12 +254,13 @@ const MemberForm = ({ handleClose }) => {
           <Form.Control
             as="select"
             value={member.municipalCouncil}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, municipalCouncil: e.target.value })
             }
             className={classnames({ "is-invalid": errors.municipalCouncil })}
           >
-            <option value="">--Select--</option>
+            <option value="">{values.municipalCouncil.name}</option>
             {councilList.councils.map((council) => (
               <option key={council._id} value={council._id}>
                 {council.name}
@@ -225,12 +278,15 @@ const MemberForm = ({ handleClose }) => {
           <Form.Control
             as="select"
             value={member.rootChapter}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, rootChapter: e.target.value })
             }
             className={classnames({ "is-invalid": errors.rootChapter })}
           >
-            <option value="">--Select--</option>
+            <option value={values.municipalCouncil.chapters[0].name}>
+              {values.municipalCouncil.chapters[0].name}
+            </option>
             {councilList.councils
               .filter((council) => {
                 return council._id === member.municipalCouncil;
@@ -255,6 +311,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Batch Name"
             value={member.batchName}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, batchName: e.target.value })
             }
@@ -272,6 +329,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Alias"
             value={member.alias}
+            readOnly={edit ? false : true}
             onChange={(e) => setMember({ ...member, alias: e.target.value })}
             className={classnames({ "is-invalid": errors.alias })}
           />
@@ -287,6 +345,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Grand Triskelion"
             value={member.grandTriskelion}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, grandTriskelion: e.target.value })
             }
@@ -304,6 +363,7 @@ const MemberForm = ({ handleClose }) => {
             type="text"
             placeholder="Master Initiator"
             value={member.masterInitiator}
+            readOnly={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, masterInitiator: e.target.value })
             }
@@ -325,4 +385,4 @@ const MemberForm = ({ handleClose }) => {
   );
 };
 
-export default MemberForm;
+export default ViewMember;

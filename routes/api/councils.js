@@ -14,7 +14,7 @@ router.get(
       const councils = await Council.find();
       res.json(councils);
     } catch (error) {
-      res.status(404).json({ msg: error.message });
+      res.status(500).json({ msg: error.message });
     }
   }
 );

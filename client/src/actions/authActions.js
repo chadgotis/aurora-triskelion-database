@@ -71,3 +71,14 @@ export const logoutUser = () => (dispatch) => {
     }
   });
 };
+
+export const forceLogout = () => async (dispatch) => {
+  // Remove from localStorage
+  localStorage.removeItem("jwtToken");
+
+  //Remove Auth header
+  setAuthToken(false);
+
+  //set current user to empty object
+  dispatch(setCurrentUser({}));
+};

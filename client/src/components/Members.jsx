@@ -42,6 +42,7 @@ const Members = () => {
     {
       dataField: "sex",
       text: "Sex",
+      sort: true,
     },
     {
       dataField: "rootChapter",
@@ -50,10 +51,12 @@ const Members = () => {
     {
       dataField: "municipalCouncil.name",
       text: "Council",
+      sort: true,
     },
     {
       dataField: "batchName",
       text: "Batch Name",
+      sort: true,
     },
     {
       dataField: "alias",
@@ -63,7 +66,7 @@ const Members = () => {
       dataField: "actions",
       text: "Actions",
       isDummyField: true,
-      formatter: (cell, row) => <MemberButtons />,
+      formatter: (cell, row) => <MemberButtons values={row} id={row._id} />,
     },
   ];
 
@@ -108,6 +111,7 @@ const Members = () => {
                     hover
                     pagination={paginationFactory()}
                     bordered={false}
+                    wrapperClasses="table-responsive"
                     {...props.baseProps}
                   />
                 </div>

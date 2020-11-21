@@ -188,7 +188,7 @@ router.delete(
 
       res.json({ msg: "Member removed successfully" });
     } catch (error) {
-      res.status(500).json({ msg: error.message });
+      res.status(400).json({ msg: error.message });
     }
   }
 );

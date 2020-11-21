@@ -15,7 +15,7 @@ const AddMember = ({ show, handleClose }) => {
           <Modal.Title>Add Member Form</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <MemberForm />
+          <MemberForm handleClose={handleClose} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
