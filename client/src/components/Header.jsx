@@ -17,11 +17,11 @@ const Header = () => {
             <i className="fas fa-tasks"></i> Management
           </Nav.Link>
         </LinkContainer>
-        <LinkContainer to="/reports">
+        {/* <LinkContainer to="/reports">
           <Nav.Link>
             <i className="fas fa-flag"></i> Reports
           </Nav.Link>
-        </LinkContainer>
+        </LinkContainer> */}
         <LinkContainer to="/accounts">
           <Nav.Link>
             <i className="fas fa-flag"></i> Accounts
@@ -72,11 +72,7 @@ const Header = () => {
             <Navbar.Brand>Aurora Triskelion Database</Navbar.Brand>
           </LinkContainer>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          {isAuthenticated
-            ? userRole === "Super-Admin" || "Admin"
-              ? admin
-              : user
-            : ""}
+          {isAuthenticated ? (userRole === "user" ? user : admin) : ""}
         </Container>
       </Navbar>
     </header>

@@ -107,3 +107,27 @@ export const removeMember = (id) => async (dispatch) => {
     });
   }
 };
+
+export const updateMember = (memberData, id, handleClose) => async (
+  dispatch
+) => {
+  try {
+    await axios.patch(`/api/members/edit/${id}`, memberData);
+    Swal.fire({
+      icon: "success",
+      title: "Updated Successfully",
+    });
+
+    dispatch(listMembers());
+  } catch (error) {
+    Swal.fire({
+      icon: "error",
+      title: "Oops!...",
+      text: "Something went wrong! Try to Contact the Administrator",
+    });
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data,
+    });
+  }
+};

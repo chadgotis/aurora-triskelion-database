@@ -5,12 +5,14 @@ import { memberListReducers } from "./reducers/memberReducers";
 import { loginUserReducers } from "./reducers/authReducers";
 import { getErrors } from "./reducers/errorReducers";
 import { councilReducer } from "./reducers/councilReducers";
+import { getAccountReducer } from "./reducers/accountReducers";
 
 const reducer = combineReducers({
   memberList: memberListReducers,
   auth: loginUserReducers,
   errors: getErrors,
   councilList: councilReducer,
+  accounts: getAccountReducer,
 });
 
 const initialState = {};

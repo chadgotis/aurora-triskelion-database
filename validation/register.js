@@ -40,7 +40,7 @@ module.exports = function validateRegisterInput(data) {
     errors.password = "password is required";
   }
   if (Validator.isEmpty(data.firstName)) {
-    errors.firstName = "Firstname required";
+    errors.firstName = "firstname is required";
   }
 
   return {

@@ -30,6 +30,7 @@ const members = require("./routes/api/members");
 const accounts = require("./routes/api/accounts");
 const councils = require("./routes/api/councils");
 const logEvents = require("./routes/api/logEvents");
+const apcOfficers = require("./routes/api/apcOfficers");
 
 // Use Routes
 
@@ -37,6 +38,7 @@ app.use("/api/accounts", accounts);
 app.use("/api/members", members);
 app.use("/api/councils", councils);
 app.use("/api/logs", logEvents);
+app.use("/api/officers", apcOfficers);
 
 // variables
 const PORT = process.env.PORT;

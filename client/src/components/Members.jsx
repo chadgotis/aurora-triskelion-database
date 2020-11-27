@@ -19,6 +19,7 @@ const Members = () => {
   const dispatch = useDispatch();
 
   const memberList = useSelector((state) => state.memberList);
+  const isUser = useSelector((state) => state.auth.user.role);
 
   const { loading, error, members } = memberList;
 
@@ -28,16 +29,20 @@ const Members = () => {
 
   const columns = [
     {
+      dataField: "t_id",
+      text: "T-ID",
+    },
+    {
       dataField: "firstName",
-      text: "First Name",
+      text: "First",
     },
     {
       dataField: "middleName",
-      text: "Middle Name",
+      text: "Middle",
     },
     {
       dataField: "lastName",
-      text: "Last Name",
+      text: "Last",
     },
     {
       dataField: "sex",
@@ -46,7 +51,7 @@ const Members = () => {
     },
     {
       dataField: "rootChapter",
-      text: "Root Chapter",
+      text: "Root",
     },
     {
       dataField: "municipalCouncil.name",
@@ -55,7 +60,7 @@ const Members = () => {
     },
     {
       dataField: "batchName",
-      text: "Batch Name",
+      text: "Batch",
       sort: true,
     },
     {
@@ -84,7 +89,9 @@ const Members = () => {
         <h2>Error</h2>
       ) : (
         <div>
-          <AddMember show={show} handleClose={handleClose} />
+          {isUser === "user" ? null : (
+            <AddMember show={show} handleClose={handleClose} />
+          )}
           <Col className="mb-3">
             <ToolkitProvider
               bootstrap4

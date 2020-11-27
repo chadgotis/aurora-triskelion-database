@@ -129,7 +129,7 @@ router.patch(
       if (req.body.middleName != null) {
         memberExists.middleName = req.body.middleName;
       }
-      if (req.body.lastname != null) {
+      if (req.body.lastName != null) {
         memberExists.lastName = req.body.lastName;
       }
       if (req.body.sex != null) {

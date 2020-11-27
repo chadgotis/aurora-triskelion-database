@@ -11,6 +11,8 @@ import {
 import classnames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { councilAction, getSingleCouncil } from "../actions/councilActions";
+import { updateMember } from "../actions/memberActions";
+import Swal from "sweetalert2";
 
 const ViewMember = ({ handleClose, values }) => {
   const dispatch = useDispatch();
@@ -32,6 +34,7 @@ const ViewMember = ({ handleClose, values }) => {
     alias,
   } = values;
   const errors = useSelector((state) => state.errors);
+  const isUser = useSelector((state) => state.auth.user.role);
   const councilList = useSelector((state) => state.councilList);
   const [edit, setEdit] = useState(false);
 
@@ -54,7 +57,7 @@ const ViewMember = ({ handleClose, values }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    const newMember = {
+    const updatedValues = {
       firstName: member.firstName,
       middleName: member.middleName,
       lastName: member.lastName,
@@ -71,8 +74,22 @@ const ViewMember = ({ handleClose, values }) => {
       alias: member.alias,
     };
 
-    // dispatch(addMember(newMember, handleClose));
-    console.log(newMember);
+    dispatch(updateMember(updatedValues, values._id, handleClose));
+  };
+
+  const editSwal = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "Editing member needs bla bla bla",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Edit Member",
+    });
+    if (result.isConfirmed) {
+      setEdit(true);
+    }
   };
 
   useEffect(() => {
@@ -83,25 +100,27 @@ const ViewMember = ({ handleClose, values }) => {
     <>
       <Form>
         <Row>
-          <Col lg={3}>
-            <ButtonGroup className="float-right" size="sm">
-              <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
-                <Button variant="warning" onClick={() => setEdit(true)}>
-                  {" "}
-                  <i className="fas fa-edit"></i>Edit
-                </Button>
-              </OverlayTrigger>
-              <OverlayTrigger overlay={<Tooltip>Print COL</Tooltip>}>
-                <Button variant="primary">
-                  {" "}
-                  <i className="fas fa-print"></i>Print COL
-                </Button>
-              </OverlayTrigger>
-            </ButtonGroup>
-          </Col>
-          <Col lg={7}>
+          <Col lg={9}>
             <h3>Personal Information</h3>
           </Col>
+          {isUser === "user" ? null : (
+            <Col>
+              <ButtonGroup className="float-right mt-2" size="sm">
+                <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
+                  <Button variant="warning" onClick={() => editSwal()}>
+                    {" "}
+                    <i className="fas fa-edit"></i>
+                  </Button>
+                </OverlayTrigger>
+                <OverlayTrigger overlay={<Tooltip>Generate COL</Tooltip>}>
+                  <Button variant="primary">
+                    {" "}
+                    <i className="fas fa-print"></i>
+                  </Button>
+                </OverlayTrigger>
+              </ButtonGroup>
+            </Col>
+          )}
         </Row>
         <Form.Group>
           <Form.Label>First Name</Form.Label>
@@ -254,7 +273,7 @@ const ViewMember = ({ handleClose, values }) => {
           <Form.Control
             as="select"
             value={member.municipalCouncil}
-            readOnly={edit ? false : true}
+            disabled={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, municipalCouncil: e.target.value })
             }
@@ -278,7 +297,7 @@ const ViewMember = ({ handleClose, values }) => {
           <Form.Control
             as="select"
             value={member.rootChapter}
-            readOnly={edit ? false : true}
+            disabled={edit ? false : true}
             onChange={(e) =>
               setMember({ ...member, rootChapter: e.target.value })
             }
@@ -375,11 +394,18 @@ const ViewMember = ({ handleClose, values }) => {
             </Form.Control.Feedback>
           )}
         </Form.Group>
-        <Form.Group>
-          <Button type="submit" block onClick={submitHandler}>
-            Add Member
-          </Button>
-        </Form.Group>
+        {edit && (
+          <Form.Group>
+            <Button
+              type="submit"
+              variant="warning"
+              block
+              onClick={submitHandler}
+            >
+              Update Member
+            </Button>
+          </Form.Group>
+        )}
       </Form>
     </>
   );

@@ -10,7 +10,7 @@ import {
 import ViewMember from "./ViewMember";
 
 import { removeMember } from "../actions/memberActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const MemberButtons = ({ id, values }) => {
   const dispatch = useDispatch();
@@ -18,6 +18,8 @@ const MemberButtons = ({ id, values }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const isUser = useSelector((state) => state.auth.user.role);
   return (
     <>
       <Modal
@@ -46,18 +48,17 @@ const MemberButtons = ({ id, values }) => {
               <i className="fas fa-eye"></i>
             </Button>
           </OverlayTrigger>
-          <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
-            <Button variant="warning">
-              {" "}
-              <i className="fas fa-edit"></i>
-            </Button>
-          </OverlayTrigger>
-          <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-            <Button variant="danger" onClick={() => dispatch(removeMember(id))}>
-              {" "}
-              <i className="fas fa-trash"></i>
-            </Button>
-          </OverlayTrigger>
+          {isUser === "user" ? null : (
+            <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+              <Button
+                variant="danger"
+                onClick={() => dispatch(removeMember(id))}
+              >
+                {" "}
+                <i className="fas fa-trash"></i>
+              </Button>
+            </OverlayTrigger>
+          )}
         </ButtonGroup>
       </Row>
     </>

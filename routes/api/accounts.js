@@ -16,7 +16,9 @@ router.get(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const accounts = await Account.find();
+      const accounts = await Account.find({ type: "user" }).select(
+        "type firstName lastName username "
+      );
       res.json(accounts);
     } catch (error) {
       res.status(500).json({ msg: error.message });

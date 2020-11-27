@@ -17,6 +17,7 @@ import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Settings from "./pages/Settings";
+import Accounts from "./pages/Accounts.jsx";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 if (localStorage.jwtToken) {
@@ -48,6 +49,7 @@ const App = () => {
               <Route path="/" exact component={Login} />
               <PrivateRoute path="/dashboard" exact component={Dashboard} />
               <PrivateRoute path="/management" exact component={Management} />
+              <PrivateRoute path="/accounts" exact component={Accounts} />
               <PrivateRoute path="/reports" exact component={Reports} />
               <PrivateRoute path="/about" exact component={About} />
               <PrivateRoute path="/settings" exact component={Settings} />
