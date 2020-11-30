@@ -5,6 +5,7 @@ const router = express.Router();
 const Council = require("../../models/Council");
 
 const passport = require("passport");
+const councilCreate = require("../../validation/councilCreate");
 
 router.get(
   "/",
@@ -35,6 +36,11 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
+      const { errors, isValid } = councilCreate(req.body);
+
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
       const councils = new Council({
         name: req.body.name,
         code: req.body.code,
