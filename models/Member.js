@@ -40,6 +40,10 @@ const memberSchema = new Schema(
       type: "string",
       required: true,
     },
+    chapter: {
+      type: "string",
+      required: true,
+    },
     municipalCouncil: {
       type: Schema.Types.ObjectId,
       ref: "councils",

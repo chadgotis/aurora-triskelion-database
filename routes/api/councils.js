@@ -7,6 +7,8 @@ const Council = require("../../models/Council");
 const passport = require("passport");
 const councilCreate = require("../../validation/councilCreate");
 
+const validateChapterInput = require("../../validation/chapterForm");
+
 router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
@@ -25,8 +27,12 @@ router.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const found = await Council.find({ _id: req.params.id }).populate();
-    res.json(found);
+    try {
+      const found = await Council.find({ _id: req.params.id }).populate();
+      res.json(found);
+    } catch (error) {
+      res.status(400).json({ msg: error.message });
+    }
   }
 );
 
@@ -76,6 +82,11 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
+      const { errors, isValid } = validateChapterInput(req.body);
+
+      if (!isValid) {
+        return res.status(400).json(errors);
+      }
       const addChapter = await Council.findOneAndUpdate(
         { _id: req.params.id },
         { $push: { chapters: { name: req.body.name } } }
@@ -101,7 +112,7 @@ router.post(
 
       res.json("Removed Successfully");
     } catch (error) {
-      res.status(3600).json({ msg: error.message });
+      res.status(400).json({ msg: error.message });
     }
   }
 );

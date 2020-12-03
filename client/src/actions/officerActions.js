@@ -4,6 +4,9 @@ import {
   GET_APC_OFFICERS_REQUEST,
   GET_APC_OFFICERS_SUCCESS,
   CREATE_APC_OFFICERS_SUCCESS,
+  GET_SINGLE_APC_OFFICERS_REQUESTS,
+  GET_SINGLE_APC_OFFICERS_SUCCESS,
+  GET_SINGLE_APC_OFFICERS_FAIL,
 } from "../constants/officerConstants";
 
 import Swal from "sweetalert2";
@@ -59,6 +62,79 @@ export const deleteOfficers = (id) => async (dispatch) => {
       title: "Ooops!",
       icon: "Error",
       text: `Ooops. Something went wrong`,
+    });
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getSingleSet = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_SINGLE_APC_OFFICERS_REQUESTS });
+    const { data } = await axios.get(`/api/officers/${id}`);
+    dispatch({ type: GET_SINGLE_APC_OFFICERS_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: GET_SINGLE_APC_OFFICERS_FAIL });
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const updateSetOfOfficers = (formData, handleCloseSet) => async (
+  dispatch
+) => {
+  try {
+    const officers = {};
+    if (formData.position === "") {
+      return Swal.fire({
+        title: "Ooops!",
+        icon: "error",
+        text: `Make sure the fields are properly field`,
+      });
+    }
+
+    if (formData.position === "Governor General")
+      officers.governorGeneral_name = formData.name;
+    if (formData.position === "Vice Governor General - District")
+      officers.districtViceGovernorGeneral_name = formData.name;
+    if (formData.position === "Vice Governor General - Executive")
+      officers.executiveViceGovernorGeneral_name = formData.name;
+    if (formData.position === "Provincial Executive Secretary")
+      officers.provExecutiveSecretary_name = formData.name;
+    if (formData.position === "Provincial Keeper of the Chest")
+      officers.provKeeperOfTheChest_name = formData.name;
+    if (formData.position === "Provincial Auditor")
+      officers.provAuditor_name = formData.name;
+    if (formData.position === "Regent for Information and Communications")
+      officers.regentInformationAndCommunication_name = formData.name;
+    if (formData.position === "Regent for Membership and Organization")
+      officers.regentMembershipAndOrganization_name = formData.name;
+    if (formData.position === "Regent for Budget and Finance")
+      officers.regentBudgetAndFinance_name = formData.name;
+    if (formData.position === "Regent Interior")
+      officers.regentInterior_name = formData.name;
+    if (formData.position === "Regent for Special Projects")
+      officers.regentSpecialProjects_name = formData.name;
+    if (formData.position === "Regent for Alumni Affairs")
+      officers.regentAlumniAffairs_name = formData.name;
+
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Set as Officer",
+    });
+
+    if (result.isConfirmed) {
+      await axios.post(`/api/officers/edit/${formData.year}`, officers);
+      Swal.fire("Success!", "Set as Officer Successfully", "success");
+      handleCloseSet();
+    }
+  } catch (error) {
+    Swal.fire({
+      title: "Ooops!",
+      icon: "error",
+      text: `Make sure the fields are properly field`,
     });
     dispatch({ type: GET_ERRORS, payload: error.response.data });
   }

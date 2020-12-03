@@ -28,6 +28,7 @@ module.exports = function validateMemberInput(data) {
     : "";
   data.batchName = !isEmpty(data.batchName) ? data.batchName : "";
   data.alias = !isEmpty(data.alias) ? data.alias : "";
+  data.chapter = !isEmpty(data.chapter) ? data.chapter : "";
 
   //validate length
   if (!Validator.isLength(data.firstName, { min: 2, max: 30 })) {
@@ -56,6 +57,9 @@ module.exports = function validateMemberInput(data) {
   }
   if (!Validator.isLength(data.alias, { min: 2, max: 30 })) {
     errors.alias = "Name must be at least 2 characters long";
+  }
+  if (!Validator.isLength(data.chapter, { min: 2, max: 45 })) {
+    errors.chapter = "Chapter must be at least 2 characters long";
   }
 
   //Date Validation
@@ -113,6 +117,9 @@ module.exports = function validateMemberInput(data) {
   }
   if (Validator.isEmpty(data.alias)) {
     errors.alias = "Alias is required";
+  }
+  if (Validator.isEmpty(data.chapter)) {
+    errors.chapter = "Chapter is required";
   }
   return {
     errors,

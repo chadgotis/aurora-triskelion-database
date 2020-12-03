@@ -10,9 +10,11 @@ import {
   ButtonGroup,
   Modal,
 } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { councilAction } from "../actions/councilActions";
 import CouncilForm from "./CouncilForm";
+import { deleteCouncil } from "../actions/councilActions";
 
 const SettingsCouncilList = () => {
   const [show, setShow] = useState(false);
@@ -23,6 +25,10 @@ const SettingsCouncilList = () => {
   const dispatch = useDispatch();
 
   const councils = useSelector((state) => state.councilList);
+
+  const deleteHandler = (id) => {
+    dispatch(deleteCouncil(id));
+  };
 
   useEffect(() => {
     dispatch(councilAction());
@@ -78,6 +84,7 @@ const SettingsCouncilList = () => {
               <thead>
                 <tr>
                   <th>Name</th>
+                  <th>Code</th>
                   <th>Total Chapters</th>
                   <th>Actions</th>
                 </tr>
@@ -86,17 +93,26 @@ const SettingsCouncilList = () => {
                 {councils.councils.map((council) => (
                   <tr key={council._id}>
                     <td>{council.name}</td>
+                    <td>{council.code}</td>
                     <td>{council.chapters.length}</td>
                     <td>
                       <ButtonGroup className="m-auto" size="sm">
                         <OverlayTrigger overlay={<Tooltip>View</Tooltip>}>
-                          <Button variant="info">
-                            {" "}
-                            <i className="fas fa-eye"></i>
-                          </Button>
+                          <LinkContainer
+                            to={`/settings/council/${council._id}`}
+                            sample={1}
+                          >
+                            <Button variant="info">
+                              {" "}
+                              <i className="fas fa-eye"></i>
+                            </Button>
+                          </LinkContainer>
                         </OverlayTrigger>
                         <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-                          <Button variant="danger">
+                          <Button
+                            variant="danger"
+                            onClick={() => deleteHandler(council._id)}
+                          >
                             {" "}
                             <i className="fas fa-trash"></i>
                           </Button>

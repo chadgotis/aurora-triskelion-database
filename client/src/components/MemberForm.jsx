@@ -26,6 +26,7 @@ const MemberForm = ({ handleClose }) => {
     masterInitiator: "",
     batchName: "",
     alias: "",
+    chapter: "",
   });
 
   const submitHandler = (e) => {
@@ -45,6 +46,7 @@ const MemberForm = ({ handleClose }) => {
       masterInitiator: member.masterInitiator,
       batchName: member.batchName,
       alias: member.alias,
+      chapter: member.chapter,
     };
 
     dispatch(addMember(newMember, handleClose));
@@ -221,14 +223,12 @@ const MemberForm = ({ handleClose }) => {
           )}
         </Form.Group>
         <Form.Group>
-          <Form.Label>Root Chapter</Form.Label>
+          <Form.Label>Chapter</Form.Label>
           <Form.Control
             as="select"
-            value={member.rootChapter}
-            onChange={(e) =>
-              setMember({ ...member, rootChapter: e.target.value })
-            }
-            className={classnames({ "is-invalid": errors.rootChapter })}
+            value={member.chapter}
+            onChange={(e) => setMember({ ...member, chapter: e.target.value })}
+            className={classnames({ "is-invalid": errors.chapter })}
           >
             <option value="">--Select--</option>
             {councilList.councils
@@ -243,6 +243,23 @@ const MemberForm = ({ handleClose }) => {
                 ));
               })}
           </Form.Control>
+          {errors.rootChapter && (
+            <Form.Control.Feedback type="invalid">
+              {errors.rootChapter}
+            </Form.Control.Feedback>
+          )}
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Root Chapter</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Chapter"
+            value={member.rootChapter}
+            onChange={(e) =>
+              setMember({ ...member, rootChapter: e.target.value })
+            }
+            className={classnames({ "is-invalid": errors.rootChapter })}
+          />
           {errors.rootChapter && (
             <Form.Control.Feedback type="invalid">
               {errors.rootChapter}

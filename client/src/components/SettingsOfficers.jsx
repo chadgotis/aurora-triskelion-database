@@ -10,6 +10,7 @@ import {
   ButtonGroup,
   Modal,
 } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { getSetOfOfficers, deleteOfficers } from "../actions/officerActions";
 import OfficersForm from "./OfficersForm";
@@ -98,11 +99,16 @@ const SettingsOfficers = () => {
                     <td>
                       <ButtonGroup className="m-auto" size="sm">
                         <OverlayTrigger overlay={<Tooltip>View</Tooltip>}>
-                          <Button variant="info">
-                            {" "}
-                            <i className="fas fa-eye"></i>
-                          </Button>
+                          <LinkContainer
+                            to={`/settings/officers/${officer._id}`}
+                          >
+                            <Button variant="info">
+                              {" "}
+                              <i className="fas fa-eye"></i>
+                            </Button>
+                          </LinkContainer>
                         </OverlayTrigger>
+
                         <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
                           <Button
                             variant="danger"

@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const reqString = {
   type: "String",
+  default: "",
 };
 
 const chapterOfficers = new Schema({
@@ -20,19 +21,19 @@ const chapterSchema = new Schema({
   officers: [chapterOfficers],
 });
 
-const officerSchema = new Schema({
-  chairman: reqString,
-  viceChairman: reqString,
-  secretary: reqString,
-  keeperOftheChest: reqString,
-  auditor: reqString,
-  budgetAndFinance: reqString,
-  membershipAndOrganization: reqString,
-  communicationAndInformation: reqString,
-  specialProjects: reqString,
-  alumniAffairs: reqString,
-  interior: reqString,
-});
+// const officerSchema = new Schema({
+//   chairman: reqString,
+//   viceChairman: reqString,
+//   secretary: reqString,
+//   keeperOftheChest: reqString,
+//   auditor: reqString,
+//   budgetAndFinance: reqString,
+//   membershipAndOrganization: reqString,
+//   communicationAndInformation: reqString,
+//   specialProjects: reqString,
+//   alumniAffairs: reqString,
+//   interior: reqString,
+// });
 
 const councilSchema = new Schema({
   name: {
@@ -43,7 +44,19 @@ const councilSchema = new Schema({
     type: "string",
     required: true,
   },
-  officers: [officerSchema],
+  officers: {
+    chairman: reqString,
+    viceChairman: reqString,
+    secretary: reqString,
+    keeperOftheChest: reqString,
+    auditor: reqString,
+    budgetAndFinance: reqString,
+    membershipAndOrganization: reqString,
+    communicationAndInformation: reqString,
+    specialProjects: reqString,
+    alumniAffairs: reqString,
+    interior: reqString,
+  },
   chapters: [chapterSchema],
 });
 

@@ -1,21 +1,23 @@
 import React, { useState, useEffect } from "react";
-import {
-  Form,
-  Button,
-  Row,
-  Col,
-  ButtonGroup,
-  OverlayTrigger,
-  Tooltip,
-} from "react-bootstrap";
+import { Form, Button, Row, Col, Modal } from "react-bootstrap";
 import classnames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
-import { councilAction, getSingleCouncil } from "../actions/councilActions";
+import { getSingleCouncil } from "../actions/councilActions";
 import { updateMember } from "../actions/memberActions";
 import Swal from "sweetalert2";
+import SetOfficer from "./SetOfficer";
+import ViewMemberButtons from "./ViewMemberButtons";
 
 const ViewMember = ({ handleClose, values }) => {
   const dispatch = useDispatch();
+
+  const [show, setShow] = useState(false);
+
+  const handleCloseSet = () => setShow(false);
+  const handleShowSet = () => setShow(true);
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
 
   const {
     firstName,
@@ -32,6 +34,8 @@ const ViewMember = ({ handleClose, values }) => {
     masterInitiator,
     batchName,
     alias,
+    chapter,
+    t_id,
   } = values;
   const errors = useSelector((state) => state.errors);
   const isUser = useSelector((state) => state.auth.user.role);
@@ -53,6 +57,8 @@ const ViewMember = ({ handleClose, values }) => {
     masterInitiator,
     batchName,
     alias,
+    chapter,
+    t_id,
   });
 
   const submitHandler = (e) => {
@@ -92,12 +98,38 @@ const ViewMember = ({ handleClose, values }) => {
     }
   };
 
+  const initial = capitalizeFirstLetter(member.middleName);
+
+  const fullName = `${capitalizeFirstLetter(member.firstName)} ${initial.charAt(
+    0
+  )}. ${capitalizeFirstLetter(member.lastName)}`;
+
   useEffect(() => {
-    dispatch(councilAction());
     dispatch(getSingleCouncil(values.municipalCouncil._id));
   }, [dispatch, values.municipalCouncil._id]);
+
   return (
     <>
+      <Modal
+        show={show}
+        onHide={handleCloseSet}
+        centered
+        backdrop="static"
+        keyboard={false}
+        className="light"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Set as APC Officer</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <SetOfficer handleCloseSet={handleCloseSet} name={fullName} />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseSet}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <Form>
         <Row>
           <Col lg={9}>
@@ -105,23 +137,14 @@ const ViewMember = ({ handleClose, values }) => {
           </Col>
           {isUser === "user" ? null : (
             <Col>
-              <ButtonGroup className="float-right mt-2" size="sm">
-                <OverlayTrigger overlay={<Tooltip>Edit</Tooltip>}>
-                  <Button variant="warning" onClick={() => editSwal()}>
-                    {" "}
-                    <i className="fas fa-edit"></i>
-                  </Button>
-                </OverlayTrigger>
-                <OverlayTrigger overlay={<Tooltip>Generate COL</Tooltip>}>
-                  <Button variant="primary">
-                    {" "}
-                    <i className="fas fa-print"></i>
-                  </Button>
-                </OverlayTrigger>
-              </ButtonGroup>
+              <ViewMemberButtons
+                editSwal={editSwal}
+                handleShowSet={handleShowSet}
+              />
             </Col>
           )}
         </Row>
+        <Form.Group>Triskelion ID: {member.t_id}</Form.Group>
         <Form.Group>
           <Form.Label>First Name</Form.Label>
           <Form.Control
@@ -293,14 +316,12 @@ const ViewMember = ({ handleClose, values }) => {
           )}
         </Form.Group>
         <Form.Group>
-          <Form.Label>Root Chapter</Form.Label>
+          <Form.Label>Chapter</Form.Label>
           <Form.Control
             as="select"
-            value={member.rootChapter}
+            value={member.chapter}
             disabled={edit ? false : true}
-            onChange={(e) =>
-              setMember({ ...member, rootChapter: e.target.value })
-            }
+            onChange={(e) => setMember({ ...member, chapter: e.target.value })}
             className={classnames({ "is-invalid": errors.rootChapter })}
           >
             <option value={values.municipalCouncil.chapters[0].name}>
@@ -318,6 +339,24 @@ const ViewMember = ({ handleClose, values }) => {
                 ));
               })}
           </Form.Control>
+          {errors.chapter && (
+            <Form.Control.Feedback type="invalid">
+              {errors.chapter}
+            </Form.Control.Feedback>
+          )}
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Root Chapter</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder="Root Chapter"
+            value={member.rootChapter}
+            readOnly={edit ? false : true}
+            onChange={(e) =>
+              setMember({ ...member, rootChapter: e.target.value })
+            }
+            className={classnames({ "is-invalid": errors.rootChapter })}
+          />
           {errors.rootChapter && (
             <Form.Control.Feedback type="invalid">
               {errors.rootChapter}

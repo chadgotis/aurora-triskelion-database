@@ -8,11 +8,29 @@ const Apc = require("../../models/Apc");
 
 const validateCouncilInput = require("../../validation/councilCreate");
 
+const validateOfficerInput = require("../../validation/officerCreate");
+
+const validateUpdateOfficerInput = require("../../validation/updateOfficer");
+
 //get APC officers
 router.get("/", async (req, res) => {
   try {
     const setOfOfficers = await Apc.find();
     res.json(setOfOfficers);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
+
+//get single Set of Officers
+
+router.get("/:id", async (req, res) => {
+  try {
+    const singleSet = await Apc.findOne({ _id: req.params.id });
+    if (!singleSet) {
+      return res.status(404).json({ msg: "Not found" });
+    }
+    res.json(singleSet);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -25,7 +43,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const { errors, isValid } = validateCouncilInput(req.body);
+      const { errors, isValid } = validateOfficerInput(req.body);
 
       if (!isValid) {
         return res.status(400).json(errors);
@@ -86,16 +104,22 @@ router.post(
       if (req.body.regentAlumniAffairs_name)
         officers.regentAlumniAffairs = req.body.regentAlumniAffairs_name;
 
+      // const { errors, isValid } = validateUpdateOfficerInput(officers);
+
+      // if (!isValid) {
+      //   return res.status(400).json(errors);
+      // }
+
       const officersIdExists = await Apc.findOne({ _id: req.params.id });
       if (officersIdExists) {
-        await Apc.findOneAndUpdate(
+        const result = await Apc.findOneAndUpdate(
           { _id: req.params.id },
           { $set: officers },
           { $new: true }
         );
-        res.json(officers);
+        res.json(result);
       } else {
-        res.status(404).json({ msg: "Not Found" });
+        res.status(404).json((errors.year = "Please Select a Year"));
       }
     } catch (error) {
       res.status(500).json({ msg: error.message });

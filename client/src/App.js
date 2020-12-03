@@ -17,7 +17,9 @@ import Reports from "./pages/Reports";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Settings from "./pages/Settings";
-import Accounts from "./pages/Accounts.jsx";
+import Accounts from "./pages/Accounts";
+import OfficerScreen from "./pages/OfficerScreen";
+import MunicipalCouncilSreen from "./pages/MunicipalCouncilSreen";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 if (localStorage.jwtToken) {
@@ -53,6 +55,14 @@ const App = () => {
               <PrivateRoute path="/reports" exact component={Reports} />
               <PrivateRoute path="/about" exact component={About} />
               <PrivateRoute path="/settings" exact component={Settings} />
+              <PrivateRoute
+                path="/settings/officers/:id"
+                component={OfficerScreen}
+              />
+              <PrivateRoute
+                path="/settings/council/:id"
+                component={MunicipalCouncilSreen}
+              />
               {/* 404 Not Found */}
               <Route component={NotFound} />
             </Switch>

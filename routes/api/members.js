@@ -67,6 +67,7 @@ router.post(
         masterInitiator,
         batchName,
         alias,
+        chapter,
       } = req.body;
 
       const council = await Council.findById(municipalCouncil);
@@ -93,6 +94,7 @@ router.post(
         masterInitiator,
         batchName,
         alias,
+        chapter,
         t_id: unique,
       });
 
@@ -164,6 +166,9 @@ router.patch(
       }
       if (req.body.alias != null) {
         memberExists.alias = req.body.alias;
+      }
+      if (req.body.chapter != null) {
+        memberExists.chapter = req.body.chapter;
       }
 
       const updatedMember = await memberExists.save();

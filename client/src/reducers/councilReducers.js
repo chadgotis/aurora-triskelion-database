@@ -1,11 +1,14 @@
 import {
   GET_COUNCILS_REQUEST,
   GET_COUNCILS_SUCCESS,
+  GET_SINGLE_COUNCIL_SUCCESS,
+  GET_SINGLE_COUNCIL_REQUEST,
 } from "../constants/councilConstants";
 
 const initialState = {
   loading: false,
   councils: [],
+  singleCouncil: {},
 };
 
 export const councilReducer = (state = initialState, action) => {
@@ -14,6 +17,10 @@ export const councilReducer = (state = initialState, action) => {
       return { ...state, loading: true, councils: [] };
     case GET_COUNCILS_SUCCESS:
       return { ...state, loading: false, councils: action.payload };
+    case GET_SINGLE_COUNCIL_REQUEST:
+      return { ...state, loading: true };
+    case GET_SINGLE_COUNCIL_SUCCESS:
+      return { ...state, loading: false, singleCouncil: action.payload };
     default:
       return state;
   }
