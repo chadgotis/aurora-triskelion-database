@@ -19,6 +19,9 @@ const SettingsOfficers = () => {
   const dispatch = useDispatch();
 
   const officers = useSelector((state) => state.officers);
+
+  const isSuperAdmin = useSelector((state) => state.auth.user.role);
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
@@ -87,7 +90,6 @@ const SettingsOfficers = () => {
               <thead>
                 <tr>
                   <th>Year</th>
-                  <th>Active</th>
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -95,7 +97,6 @@ const SettingsOfficers = () => {
                 {officers.officerSet.map((officer) => (
                   <tr key={officer._id}>
                     <td>{officer.year}</td>
-                    <td>{officer.current.toString()}</td>
                     <td>
                       <ButtonGroup className="m-auto" size="sm">
                         <OverlayTrigger overlay={<Tooltip>View</Tooltip>}>
@@ -108,16 +109,17 @@ const SettingsOfficers = () => {
                             </Button>
                           </LinkContainer>
                         </OverlayTrigger>
-
-                        <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-                          <Button
-                            variant="danger"
-                            onClick={() => deleteHandler(officer._id)}
-                          >
-                            {" "}
-                            <i className="fas fa-trash"></i>
-                          </Button>
-                        </OverlayTrigger>
+                        {isSuperAdmin === "Super-Admin" ? (
+                          <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+                            <Button
+                              variant="danger"
+                              onClick={() => deleteHandler(officer._id)}
+                            >
+                              {" "}
+                              <i className="fas fa-trash"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        ) : null}
                       </ButtonGroup>
                     </td>
                   </tr>

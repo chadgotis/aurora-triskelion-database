@@ -22,6 +22,24 @@ router.get(
   }
 );
 
+//get all latest added members with limit
+
+router.get(
+  "/latest",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    const latest = await Member.find()
+      .populate("municipalCouncil")
+      .sort({ createdAt: -1 })
+      .limit(5);
+    try {
+      res.json(latest);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
+);
+
 // get single Member
 router.get(
   "/:id",

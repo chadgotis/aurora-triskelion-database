@@ -5,9 +5,14 @@ import {
   MEMBER_ADD_REQUEST,
   MEMBER_ADD_FAIL,
   MEMBER_ADD_SUCCESS,
+  GET_LATEST_ADDED_REQUEST,
+  GET_LATEST_ADDED_SUCCESS,
 } from "../constants/memberConstants";
 
-export const memberListReducers = (state = { members: [] }, action) => {
+export const memberListReducers = (
+  state = { members: [], latest: [] },
+  action
+) => {
   switch (action.type) {
     case MEMBER_LIST_REQUEST:
       return { ...state, loading: true, members: [] };
@@ -15,6 +20,10 @@ export const memberListReducers = (state = { members: [] }, action) => {
       return { ...state, loading: false, members: action.payload };
     case MEMBER_LIST_FAIL:
       return { ...state, loading: false, error: action.payload };
+    case GET_LATEST_ADDED_REQUEST:
+      return { ...state, loading: true };
+    case GET_LATEST_ADDED_SUCCESS:
+      return { ...state, loading: false, latest: action.payload };
     default:
       return state;
   }

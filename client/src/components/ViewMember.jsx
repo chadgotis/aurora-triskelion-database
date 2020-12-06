@@ -140,6 +140,8 @@ const ViewMember = ({ handleClose, values }) => {
               <ViewMemberButtons
                 editSwal={editSwal}
                 handleShowSet={handleShowSet}
+                name={fullName}
+                values={values}
               />
             </Col>
           )}

@@ -7,6 +7,8 @@ import {
   GET_SINGLE_APC_OFFICERS_REQUESTS,
   GET_SINGLE_APC_OFFICERS_SUCCESS,
   GET_SINGLE_APC_OFFICERS_FAIL,
+  GET_LATEST_SET_OF_OFFICERS_SUCCESS,
+  GET_LATEST_SET_OF_OFFICERS_REQUEST,
 } from "../constants/officerConstants";
 
 import Swal from "sweetalert2";
@@ -136,6 +138,16 @@ export const updateSetOfOfficers = (formData, handleCloseSet) => async (
       icon: "error",
       text: `Make sure the fields are properly field`,
     });
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getLatestSetOfOfficers = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_LATEST_SET_OF_OFFICERS_REQUEST });
+    const { data } = await axios.get(`/api/officers/latest`);
+    dispatch({ type: GET_LATEST_SET_OF_OFFICERS_SUCCESS, payload: data[0] });
+  } catch (error) {
     dispatch({ type: GET_ERRORS, payload: error.response.data });
   }
 };

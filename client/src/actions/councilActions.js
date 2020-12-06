@@ -3,6 +3,8 @@ import {
   GET_COUNCILS_SUCCESS,
   GET_SINGLE_COUNCIL_SUCCESS,
   GET_SINGLE_COUNCIL_REQUEST,
+  GET_SINGLE_CHAPTER_SUCCESS,
+  GET_SINGLE_CHAPTER_REQUEST,
 } from "../constants/councilConstants";
 import axios from "axios";
 import { GET_ERRORS, CLEAR_ERRORS } from "../constants/errorConstants";
@@ -125,6 +127,104 @@ export const deleteChapter = (council_id, chapter_id) => async (dispatch) => {
       title: "Ooops!",
       icon: "error",
       text: `Ooops. Something went wrong`,
+    });
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const editCouncilOfficers = (formData, handleCloseCouncil) => async (
+  dispatch
+) => {
+  try {
+    const officers = {};
+
+    if (formData.position === "Chairman") officers.chairman = formData.name;
+    if (formData.position === "Vice Chairman")
+      officers.viceChairman = formData.name;
+    if (formData.position === "Secretary") officers.secretary = formData.name;
+    if (formData.position === "Keeper of the Chest")
+      officers.keeperOftheChest = formData.name;
+    if (formData.position === "Auditor") officers.auditor = formData.name;
+    if (formData.position === "Budget and Finance")
+      officers.budgetAndFinance = formData.name;
+    if (formData.position === "Membership and Organization")
+      officers.membershipAndOrganization = formData.name;
+    if (formData.position === "Communication and Information")
+      officers.communicationAndInformation = formData.name;
+    if (formData.position === "Special Projects")
+      officers.specialProjects = formData.name;
+    if (formData.position === "Alumni Affairs")
+      officers.alumniAffairs = formData.name;
+    if (formData.position === "Interior") officers.interior = formData.name;
+    if (formData.position === "") {
+      return Swal.fire({
+        title: "Ooops!",
+        icon: "error",
+        text: `Ooops. Something went wrong. Make sure to fill up the required fields`,
+      });
+    }
+
+    await axios.post(
+      `/api/councils/officers/edit/${formData.council}`,
+      officers
+    );
+
+    Swal.fire("Success!", "Success", "success");
+    handleCloseCouncil();
+  } catch (error) {
+    Swal.fire({
+      title: "Ooops!",
+      icon: "error",
+      text: `Ooops. Something went wrong. Make sure to fill up the required fields`,
+    });
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getSingleChapter = (council_id, chapter_id) => async (
+  dispatch
+) => {
+  try {
+    dispatch({ type: GET_SINGLE_CHAPTER_REQUEST });
+    const { data } = await axios.get(
+      `/api/councils/chapter/${council_id}/${chapter_id}`
+    );
+    dispatch({ type: GET_SINGLE_CHAPTER_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({ type: GET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const editChapterOfficer = (formData, handleCloseChap) => async (
+  dispatch
+) => {
+  try {
+    const officer = {};
+    if (formData.position === "Grand Triskelion")
+      officer.grandTriskelion = formData.name;
+    if (formData.position === "Deputy Grand Triskelion")
+      officer.deputyGrandTriskelion = formData.name;
+    if (formData.position === "Master Wielder of the Whip")
+      officer.masterWilderOfTheWhip = formData.name;
+    if (formData.position === "") {
+      return Swal.fire({
+        title: "Ooops!",
+        icon: "error",
+        text: `Ooops. Something went wrong. Make sure to fill up the required fields`,
+      });
+    }
+
+    await axios.post(
+      `/api/councils/chapter/officers/edit/${formData.council}/${formData.chapter}`,
+      officer
+    );
+    Swal.fire("Success!", "Success", "success");
+    handleCloseChap();
+  } catch (error) {
+    Swal.fire({
+      title: "Ooops!",
+      icon: "error",
+      text: `Ooops. Something went wrong. Make sure to fill up the required fields`,
     });
     dispatch({ type: GET_ERRORS, payload: error.response.data });
   }

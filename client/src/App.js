@@ -20,6 +20,7 @@ import Settings from "./pages/Settings";
 import Accounts from "./pages/Accounts";
 import OfficerScreen from "./pages/OfficerScreen";
 import MunicipalCouncilSreen from "./pages/MunicipalCouncilSreen";
+import ChapterScreen from "./pages/ChapterScreen";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 if (localStorage.jwtToken) {
@@ -56,6 +57,10 @@ const App = () => {
               <PrivateRoute path="/about" exact component={About} />
               <PrivateRoute path="/settings" exact component={Settings} />
               <PrivateRoute
+                path="/settings/council/:council_id/:chapter_id"
+                component={ChapterScreen}
+              />
+              <PrivateRoute
                 path="/settings/officers/:id"
                 component={OfficerScreen}
               />
@@ -63,6 +68,7 @@ const App = () => {
                 path="/settings/council/:id"
                 component={MunicipalCouncilSreen}
               />
+
               {/* 404 Not Found */}
               <Route component={NotFound} />
             </Switch>

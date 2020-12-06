@@ -13,10 +13,25 @@ const validateOfficerInput = require("../../validation/officerCreate");
 const validateUpdateOfficerInput = require("../../validation/updateOfficer");
 
 //get APC officers
-router.get("/", async (req, res) => {
+router.get(
+  "/",
+  passport.authenticate("jwt", { session: false }),
+  async (req, res) => {
+    try {
+      const setOfOfficers = await Apc.find();
+      res.json(setOfOfficers);
+    } catch (error) {
+      res.status(500).json({ msg: error.message });
+    }
+  }
+);
+router.get("/latest", async (req, res) => {
   try {
-    const setOfOfficers = await Apc.find();
-    res.json(setOfOfficers);
+    const singleSet = await Apc.find().sort({ _id: -1 }).limit(1);
+    if (!singleSet) {
+      return res.status(404).json({ msg: "Not found" });
+    }
+    res.json(singleSet);
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }

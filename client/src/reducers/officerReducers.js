@@ -7,6 +7,8 @@ import {
   GET_SINGLE_APC_OFFICERS_REQUESTS,
   GET_SINGLE_APC_OFFICERS_SUCCESS,
   GET_SINGLE_APC_OFFICERS_FAIL,
+  GET_LATEST_SET_OF_OFFICERS_SUCCESS,
+  GET_LATEST_SET_OF_OFFICERS_REQUEST,
 } from "../constants/officerConstants";
 
 const initialState = {
@@ -17,6 +19,7 @@ const initialState = {
     loading: false,
     set: {},
   },
+  latest: {},
 };
 
 export const setOfOfficersReducer = (state = initialState, action) => {
@@ -37,6 +40,10 @@ export const setOfOfficersReducer = (state = initialState, action) => {
       return { ...state, officers: { loading: false, set: action.payload } };
     case GET_SINGLE_APC_OFFICERS_FAIL:
       return { ...state, officers: { loading: false, set: {} } };
+    case GET_LATEST_SET_OF_OFFICERS_REQUEST:
+      return { ...state, loading: true };
+    case GET_LATEST_SET_OF_OFFICERS_SUCCESS:
+      return { ...state, loading: false, latest: action.payload };
     default:
       return state;
   }

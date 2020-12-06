@@ -11,13 +11,14 @@ const AccountList = () => {
   const handleShow = () => setShow(true);
 
   const accounts = useSelector((state) => state.accounts);
+  const role = useSelector((state) => state.auth.user.role);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUserAccounts());
-  }, [dispatch]);
+    dispatch(getUserAccounts(role));
+  }, [dispatch, role]);
 
   const delUser = (id) => {
-    dispatch(deleteUserAccount(id));
+    dispatch(deleteUserAccount(id, role));
   };
   return (
     <>

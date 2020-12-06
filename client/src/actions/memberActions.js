@@ -4,6 +4,8 @@ import {
   MEMBER_LIST_FAIL,
   MEMBER_ADD_REQUEST,
   MEMBER_ADD_SUCCESS,
+  GET_LATEST_ADDED_REQUEST,
+  GET_LATEST_ADDED_SUCCESS,
 } from "../constants/memberConstants";
 
 import Swal from "sweetalert2";
@@ -125,6 +127,19 @@ export const updateMember = (memberData, id, handleClose) => async (
       title: "Oops!...",
       text: "Something went wrong! Try to Contact the Administrator",
     });
+    dispatch({
+      type: GET_ERRORS,
+      payload: error.response.data,
+    });
+  }
+};
+
+export const getLatestAddedMember = () => async (dispatch) => {
+  try {
+    dispatch({ type: GET_LATEST_ADDED_REQUEST });
+    const { data } = await axios.get("/api/members/latest");
+    dispatch({ type: GET_LATEST_ADDED_SUCCESS, payload: data });
+  } catch (error) {
     dispatch({
       type: GET_ERRORS,
       payload: error.response.data,

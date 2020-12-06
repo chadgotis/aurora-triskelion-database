@@ -25,6 +25,7 @@ const SettingsCouncilList = () => {
   const dispatch = useDispatch();
 
   const councils = useSelector((state) => state.councilList);
+  const isSuperAdmin = useSelector((state) => state.auth.user.role);
 
   const deleteHandler = (id) => {
     dispatch(deleteCouncil(id));
@@ -108,15 +109,17 @@ const SettingsCouncilList = () => {
                             </Button>
                           </LinkContainer>
                         </OverlayTrigger>
-                        <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-                          <Button
-                            variant="danger"
-                            onClick={() => deleteHandler(council._id)}
-                          >
-                            {" "}
-                            <i className="fas fa-trash"></i>
-                          </Button>
-                        </OverlayTrigger>
+                        {isSuperAdmin === "Super-Admin" ? (
+                          <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+                            <Button
+                              variant="danger"
+                              onClick={() => deleteHandler(council._id)}
+                            >
+                              {" "}
+                              <i className="fas fa-trash"></i>
+                            </Button>
+                          </OverlayTrigger>
+                        ) : null}
                       </ButtonGroup>
                     </td>
                   </tr>

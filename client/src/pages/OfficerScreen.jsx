@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Breadcrumb, Row, Col, Table, Button, Spinner } from "react-bootstrap";
+import { Breadcrumb, Row, Col, Table, Spinner } from "react-bootstrap";
 import { getSingleSet } from "../actions/officerActions";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
@@ -18,12 +18,11 @@ const OfficerScreen = ({ match }) => {
         <LinkContainer to="/settings">
           <Breadcrumb.Item>Settings</Breadcrumb.Item>
         </LinkContainer>
-        <Breadcrumb.Item active>Officers</Breadcrumb.Item>
+        <Breadcrumb.Item active>APC Officers</Breadcrumb.Item>
       </Breadcrumb>
       <Row>
         <Col></Col>
         <Col xs={8}>
-          <Button className="mb-3">Set as Active</Button>
           {isLoading ? (
             <Spinner
               animation="border"

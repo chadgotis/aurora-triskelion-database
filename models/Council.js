@@ -7,18 +7,16 @@ const reqString = {
   default: "",
 };
 
-const chapterOfficers = new Schema({
-  grandTriskelion: reqString,
-  deputyGrandTriskelion: reqString,
-  masterWilderOfTheWhip: reqString,
-});
-
 const chapterSchema = new Schema({
   name: {
     type: "String",
     required: true,
   },
-  officers: [chapterOfficers],
+  officers: {
+    grandTriskelion: reqString,
+    deputyGrandTriskelion: reqString,
+    masterWilderOfTheWhip: reqString,
+  },
 });
 
 // const officerSchema = new Schema({

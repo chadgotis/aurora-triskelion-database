@@ -1,23 +1,59 @@
 import { jsPDF } from "jspdf";
 import imageApc from "../assets/APC.jpg";
 
-export const samplePDF = () => {
+export const certificateOfLegitimacy = (values, requested, governorGeneral) => {
   const lMargin = 15; //left margin in mm
   const rMargin = 15; //right margin in mm
   const pdfInMM = 215.9; // width of letter in mm
 
-  let name = "Bro. Mark Gerald Obal";
-  let chapter = "Wesleyan University-Philippines (Aurora Campus) Chapter";
-  let municipality = "Maria Aurora Municipal Council";
-  let tbirth = "February 14,2009";
-  let batch = "B";
-  let alias = "BONE";
+  const chapSingle = values.municipalCouncil.chapters.filter(
+    (res) => res.name === values.chapter
+  );
+
+  console.log(values, chapSingle[0]);
+
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  const initial = capitalizeFirstLetter(values.middleName);
+
+  const fullName = `${capitalizeFirstLetter(values.firstName)} ${initial.charAt(
+    0
+  )}. ${capitalizeFirstLetter(values.lastName)}`;
+
+  let months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  let tYear = values.triskelionBirth.slice(0, 4);
+  let tMonth = Number(values.triskelionBirth.slice(5, 7));
+  let tDay = values.triskelionBirth.slice(8, 10);
+
+  let selectedMonth = months[tMonth - 1];
+
+  let chapter = values.chapter;
+  let municipality = values.municipalCouncil.name;
+  let batch = values.batchName;
+  let alias = values.alias;
+  let t_id = values.t_id;
   let today = new Date();
-  let requestedBy = "Bro. Mark Gerald Obal";
-  let body = `\tThis is to certify that ${name} is a bonafide Brother of TAU GAMMA PHI/SIGMA TRISKELIONS GRAND FRATERNITY AND SORORITY of ${chapter},${municipality}, Triskelion De Aurora Provincial Council.\n\n\tAs per record he was given his final rites dated ${tbirth} of Batch '${batch}', alias "${alias}".\n\nIssued this ${today.toLocaleString(
+  let requestedBy = requested;
+  let body = `\tThis is to certify that ${fullName.toUpperCase()} is a bonafide Brother of TAU GAMMA PHI/SIGMA TRISKELIONS GRAND FRATERNITY AND SORORITY of ${chapter} Chapter,${municipality} Municipal Council, Triskelion De Aurora Provincial Council.\n\n\tAs per record he was given his final rites dated ${selectedMonth} ${tDay}, ${tYear} of Batch '${batch.toUpperCase()}', alias "${alias.toUpperCase()}" with a Triskelion ID of ${t_id}.\n\nIssued this ${today.toLocaleString(
     "default",
     { month: "long" }
-  )} ${today.getDay()}, ${today.getFullYear()} upon the request of ${requestedBy}`;
+  )} ${today.getDate()}, ${today.getFullYear()} upon the request of ${requestedBy}.`;
   let content = body;
 
   const doc = new jsPDF("p", "mm", "letter");
@@ -34,25 +70,24 @@ export const samplePDF = () => {
   doc.setFont("times", "normal");
   doc.text("CERTIFICATE OF LEGITIMACY", 105, 75, "center");
   doc.setFontSize(15);
- 
 
   let lines = doc.splitTextToSize(content, pdfInMM - lMargin - rMargin);
   doc.text(lMargin, 90, lines);
   doc.text("Certified true and correct", 15, 160);
   doc.setFont("times", "bold");
-  doc.text("Bro. Aldrin Viernes", 15, 174);
+  doc.text(`${chapSingle[0].officers.grandTriskelion}`, 15, 174);
   doc.setFont("times", "italic");
   doc.text("Grand Triskelion", 15, 181);
-  doc.text("Wesleyan University-Philippines Chapter", 15, 188);
+  doc.text(`${chapSingle[0].name} Chapter`, 15, 188);
 
   doc.setFont("times", "bold");
-  doc.text("Bro. Aldrin Viernes", 15, 202);
+  doc.text(`${values.municipalCouncil.officers.chairman}`, 15, 202);
   doc.setFont("times", "italic");
   doc.text("Municipal Chairman", 15, 209);
-  doc.text("Maria Aurora Municipal Council", 15, 216);
+  doc.text(`${values.municipalCouncil.name} Municipal Council`, 15, 216);
 
   doc.setFont("times", "bold");
-  doc.text("Bro. Aldrin Viernes", 15, 230);
+  doc.text(`${governorGeneral}`, 15, 230);
   doc.setFont("times", "italic");
   doc.text("Governor General", 15, 237);
   doc.text("Aurora Provincial Council", 15, 244);

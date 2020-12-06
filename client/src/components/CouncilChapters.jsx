@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import ChapterForm from "./ChapterForm";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { deleteChapter } from "../actions/councilActions";
+import { LinkContainer } from "react-router-bootstrap";
 
 import {
   Card,
@@ -19,6 +20,8 @@ const CouncilChapters = ({ chapters, councilId }) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const dispatch = useDispatch();
+
+  const isSuperAdmin = useSelector((state) => state.auth.user.role);
 
   const deleteHandler = (id) => {
     dispatch(deleteChapter(councilId, id));
@@ -80,25 +83,26 @@ const CouncilChapters = ({ chapters, councilId }) => {
                   <td>
                     <ButtonGroup className="m-auto" size="sm">
                       <OverlayTrigger overlay={<Tooltip>View</Tooltip>}>
-                        {/* <LinkContainer
-                            to={`/settings/council/${council._id}`}
-                            sample={1}
-                          > */}
-                        <Button variant="info">
-                          {" "}
-                          <i className="fas fa-eye"></i>
-                        </Button>
-                        {/* </LinkContainer> */}
-                      </OverlayTrigger>
-                      <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
-                        <Button
-                          variant="danger"
-                          onClick={() => deleteHandler(chapter._id)}
+                        <LinkContainer
+                          to={`/settings/council/${councilId}/${chapter._id}`}
                         >
-                          {" "}
-                          <i className="fas fa-trash"></i>
-                        </Button>
+                          <Button variant="info">
+                            {" "}
+                            <i className="fas fa-eye"></i>
+                          </Button>
+                        </LinkContainer>
                       </OverlayTrigger>
+                      {isSuperAdmin === "Super-Admin" ? (
+                        <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
+                          <Button
+                            variant="danger"
+                            onClick={() => deleteHandler(chapter._id)}
+                          >
+                            {" "}
+                            <i className="fas fa-trash"></i>
+                          </Button>
+                        </OverlayTrigger>
+                      ) : null}
                     </ButtonGroup>
                   </td>
                 </tr>

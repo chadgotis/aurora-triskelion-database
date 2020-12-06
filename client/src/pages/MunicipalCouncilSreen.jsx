@@ -50,14 +50,25 @@ const MunicipalCouncilSreen = ({ match }) => {
         </Col>
       </Row>
 
-      <Row>
-        <Col>
-          <CouncilOfficers officers={council.officers} />
-        </Col>
-        <Col>
-          <CouncilChapters chapters={council.chapters} councilId={councilId} />
-        </Col>
-      </Row>
+      {isLoading ? (
+        <Spinner
+          animation="border"
+          style={{ margin: "auto", display: "block" }}
+          className="my-3"
+        />
+      ) : (
+        <Row>
+          <Col>
+            <CouncilOfficers officers={council.officers} />
+          </Col>
+          <Col>
+            <CouncilChapters
+              chapters={council.chapters}
+              councilId={councilId}
+            />
+          </Col>
+        </Row>
+      )}
     </>
   );
 };

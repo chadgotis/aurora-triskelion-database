@@ -187,18 +187,37 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
     try {
-      const updateChapter = await Council.updateOne(
+      const chapExists = await Council.findOne(
+        { "chapters._id": req.params.c_id },
+        { "chapters.$": 1, _id: 0 }
+      );
+      if (!chapExists) return res.status(404).json({ msg: "Not Found" });
+
+      if (!req.body.grandTriskelion) {
+        req.body.grandTriskelion =
+          chapExists.chapters[0].officers.grandTriskelion;
+      }
+      if (!req.body.deputyGrandTriskelion) {
+        req.body.deputyGrandTriskelion =
+          chapExists.chapters[0].officers.deputyGrandTriskelion;
+      }
+      if (!req.body.masterWilderOfTheWhip) {
+        req.body.masterWilderOfTheWhip =
+          chapExists.chapters[0].officers.masterWilderOfTheWhip;
+      }
+
+      const updateChapter = await Council.findOneAndUpdate(
         { "chapters._id": req.params.c_id },
         {
-          $set: {
-            "chapters.$.officers.grandTriskelion": req.body.grandTriskelion,
-            "chapters.$.officers.deputyGrandTriskelion":
-              req.body.deputyGrandTriskelion,
-            "chapters.$.officers.masterWilderOfTheWhip":
-              req.body.masterWilderOfTheWhip,
+          "chapters.$.officers": {
+            grandTriskelion: req.body.grandTriskelion,
+            deputyGrandTriskelion: req.body.deputyGrandTriskelion,
+            masterWilderOfTheWhip: req.body.masterWilderOfTheWhip,
           },
         }
       );
+
+      if (!updateChapter) return res.status(404).json({ msg: "Not found" });
 
       res.json("Edit Success");
     } catch (error) {
@@ -206,5 +225,19 @@ router.post(
     }
   }
 );
+
+//get single Chapter
+router.get(`/chapter/:council_id/:chapter_id`, async (req, res) => {
+  try {
+    const chapExists = await Council.findOne(
+      { "chapters._id": req.params.chapter_id },
+      { "chapters.$": 1, _id: 0 }
+    );
+    if (!chapExists) return res.status(404).json({ msg: "Not Found" });
+    res.json(chapExists);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+});
 
 module.exports = router;

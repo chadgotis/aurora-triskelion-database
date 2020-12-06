@@ -6,7 +6,6 @@ import { updateSetOfOfficers } from "../actions/officerActions";
 
 const SetOfficer = ({ name, handleCloseSet }) => {
   const officerSet = useSelector((state) => state.officers.officerSet);
-  console.log(name);
   const [formData, setFormData] = useState({
     year: "",
     position: "",

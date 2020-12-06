@@ -8,8 +8,13 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import { GET_ERRORS, CLEAR_ERRORS } from "../constants/errorConstants";
 
-export const getUserAccounts = () => async (dispatch) => {
+export const getUserAccounts = (role) => async (dispatch) => {
   try {
+    if (role === "admin") {
+      dispatch({ type: ACCOUNT_REQUEST });
+      const { data } = await axios.get("/api/accounts/users");
+      return dispatch({ type: ACCOUNT_SUCCESS, payload: data });
+    }
     dispatch({ type: ACCOUNT_REQUEST });
     const { data } = await axios.get("/api/accounts");
     dispatch({ type: ACCOUNT_SUCCESS, payload: data });
@@ -21,7 +26,7 @@ export const getUserAccounts = () => async (dispatch) => {
   }
 };
 
-export const createUserAccount = (userData, handleClose) => async (
+export const createUserAccount = (userData, handleClose, role) => async (
   dispatch
 ) => {
   try {
@@ -34,13 +39,13 @@ export const createUserAccount = (userData, handleClose) => async (
       html: `<p>Remember these credentials. Password can be ONLY viewed ONCE.</p><h3>Username: ${userData.username}</h3><h3>Password: ${userData.password}</h3>`,
     });
     handleClose();
-    dispatch(getUserAccounts());
+    dispatch(getUserAccounts(role));
   } catch (error) {
     dispatch({ type: ADD_ACCOUNT_FAIL, payload: error.response.data });
   }
 };
 
-export const deleteUserAccount = (id) => async (dispatch) => {
+export const deleteUserAccount = (id, role) => async (dispatch) => {
   try {
     const result = await Swal.fire({
       title: "Remove Account?",
@@ -54,7 +59,7 @@ export const deleteUserAccount = (id) => async (dispatch) => {
     if (result.isConfirmed) {
       await axios.delete(`/api/accounts/delete/${id}`);
       Swal.fire("Success!", "Removed Successfully", "success");
-      dispatch(getUserAccounts());
+      dispatch(getUserAccounts(role));
       dispatch({ type: CLEAR_ERRORS });
     }
   } catch (error) {

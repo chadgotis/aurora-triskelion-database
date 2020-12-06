@@ -6,6 +6,8 @@ import { useDispatch, useSelector } from "react-redux";
 
 const CreateAccount = ({ handleClose }) => {
   const errors = useSelector((state) => state.accounts.errors);
+  const isSuperAdmin = useSelector((state) => state.auth.user.role);
+  const role = useSelector((state) => state.auth.user.role);
   const dispatch = useDispatch();
 
   const [user, setUser] = useState({
@@ -13,6 +15,7 @@ const CreateAccount = ({ handleClose }) => {
     lastName: "",
     middleName: "",
     username: "",
+    type: "user",
   });
 
   const [pass, setPass] = useState("");
@@ -23,8 +26,9 @@ const CreateAccount = ({ handleClose }) => {
       lastName: user.lastName,
       username: user.username,
       password: pass,
+      type: user.type,
     };
-    dispatch(createUserAccount(newAccount, handleClose));
+    dispatch(createUserAccount(newAccount, handleClose, role));
   };
 
   const generateRandomPass = () => {
@@ -33,6 +37,20 @@ const CreateAccount = ({ handleClose }) => {
   return (
     <>
       <Form>
+        {isSuperAdmin === "Super-Admin" ? (
+          <Form.Group>
+            <Form.Label>Account Type</Form.Label>
+            <Form.Control
+              as="select"
+              value={user.type}
+              onChange={(e) => setUser({ ...user, type: e.target.value })}
+            >
+              <option value="">--Select--</option>
+              <option value="admin">Admin</option>
+              <option value="user">User</option>
+            </Form.Control>
+          </Form.Group>
+        ) : null}
         <Form.Group>
           <Form.Label>First Name</Form.Label>
           <Form.Control
