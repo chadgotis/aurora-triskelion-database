@@ -29,7 +29,7 @@ app.use(express.json());
 const members = require("./routes/api/members");
 const accounts = require("./routes/api/accounts");
 const councils = require("./routes/api/councils");
-const logEvents = require("./routes/api/logEvents");
+const events = require("./routes/api/events");
 const apcOfficers = require("./routes/api/apcOfficers");
 
 // Use Routes
@@ -37,7 +37,7 @@ const apcOfficers = require("./routes/api/apcOfficers");
 app.use("/api/accounts", accounts);
 app.use("/api/members", members);
 app.use("/api/councils", councils);
-app.use("/api/logs", logEvents);
+app.use("/api/events", events);
 app.use("/api/officers", apcOfficers);
 
 // variables

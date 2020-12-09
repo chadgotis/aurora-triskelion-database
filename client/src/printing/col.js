@@ -1,16 +1,17 @@
 import { jsPDF } from "jspdf";
 import imageApc from "../assets/APC.jpg";
 
-export const certificateOfLegitimacy = (values, requested, governorGeneral) => {
+export const certificateOfLegitimacy = (
+  values,
+  requested,
+  grandTriskelion,
+  chairman,
+  governorGeneral,
+  sigChap
+) => {
   const lMargin = 15; //left margin in mm
   const rMargin = 15; //right margin in mm
   const pdfInMM = 215.9; // width of letter in mm
-
-  const chapSingle = values.municipalCouncil.chapters.filter(
-    (res) => res.name === values.chapter
-  );
-
-  console.log(values, chapSingle[0]);
 
   const capitalizeFirstLetter = (string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -75,13 +76,13 @@ export const certificateOfLegitimacy = (values, requested, governorGeneral) => {
   doc.text(lMargin, 90, lines);
   doc.text("Certified true and correct", 15, 160);
   doc.setFont("times", "bold");
-  doc.text(`${chapSingle[0].officers.grandTriskelion}`, 15, 174);
+  doc.text(`${grandTriskelion}`, 15, 174);
   doc.setFont("times", "italic");
   doc.text("Grand Triskelion", 15, 181);
-  doc.text(`${chapSingle[0].name} Chapter`, 15, 188);
+  doc.text(`${sigChap} Chapter`, 15, 188);
 
   doc.setFont("times", "bold");
-  doc.text(`${values.municipalCouncil.officers.chairman}`, 15, 202);
+  doc.text(`${chairman}`, 15, 202);
   doc.setFont("times", "italic");
   doc.text("Municipal Chairman", 15, 209);
   doc.text(`${values.municipalCouncil.name} Municipal Council`, 15, 216);
@@ -91,7 +92,7 @@ export const certificateOfLegitimacy = (values, requested, governorGeneral) => {
   doc.setFont("times", "italic");
   doc.text("Governor General", 15, 237);
   doc.text("Aurora Provincial Council", 15, 244);
-  // doc.save("Generated.pdf");
+  doc.save(`COL-${t_id}.pdf`);
 
   window.open(doc.output("bloburl"), "_blank");
 };

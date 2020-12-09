@@ -8,13 +8,14 @@ const ChapterForm = ({ c_id, handleClose }) => {
   const [chapter, setChapter] = useState("");
   const dispatch = useDispatch();
   const errors = useSelector((state) => state.errors);
+  const account = useSelector((state) => state.auth.user);
 
   const submitHandler = () => {
     const newChap = {
       name: chapter,
       c_id,
     };
-    dispatch(createChapter(newChap, handleClose));
+    dispatch(createChapter(newChap, handleClose, account));
   };
 
   return (

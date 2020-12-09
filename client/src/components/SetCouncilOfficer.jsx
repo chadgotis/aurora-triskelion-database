@@ -6,6 +6,7 @@ import { editCouncilOfficers } from "../actions/councilActions";
 
 const SetCouncilOfficer = ({ handleCloseCouncil, name }) => {
   const councilSet = useSelector((state) => state.councilList.councils);
+  const account = useSelector((state) => state.auth.user);
 
   const dispatch = useDispatch();
 
@@ -18,7 +19,7 @@ const SetCouncilOfficer = ({ handleCloseCouncil, name }) => {
   });
 
   const submitHandler = () => {
-    dispatch(editCouncilOfficers(formData, handleCloseCouncil));
+    dispatch(editCouncilOfficers(formData, handleCloseCouncil, account));
   };
   return (
     <>

@@ -6,7 +6,7 @@ import { createCouncil } from "../actions/councilActions";
 
 const CouncilForm = ({ handleClose }) => {
   const errors = useSelector((state) => state.errors);
-
+  const account = useSelector((state) => state.auth.user);
   const [council, setCouncil] = useState({
     name: "",
     code: "",
@@ -15,7 +15,7 @@ const CouncilForm = ({ handleClose }) => {
   const dispatch = useDispatch();
 
   const submitHandler = () => {
-    dispatch(createCouncil(council, handleClose));
+    dispatch(createCouncil(council, handleClose, account));
   };
   return (
     <>

@@ -6,8 +6,11 @@ import { updateSetOfOfficers } from "../actions/officerActions";
 
 const SetOfficer = ({ name, handleCloseSet }) => {
   const officerSet = useSelector((state) => state.officers.officerSet);
+  const lastItem = officerSet[officerSet.length - 1];
+  const account = useSelector((state) => state.auth.user);
+  // console.log(lastItem);
   const [formData, setFormData] = useState({
-    year: "",
+    year: lastItem._id,
     position: "",
     name,
   });
@@ -15,7 +18,7 @@ const SetOfficer = ({ name, handleCloseSet }) => {
   const dispatch = useDispatch();
 
   const submitHandler = () => {
-    dispatch(updateSetOfOfficers(formData, handleCloseSet));
+    dispatch(updateSetOfOfficers(formData, handleCloseSet, account));
   };
   const errors = useSelector((state) => state.errors);
   return (
@@ -24,18 +27,18 @@ const SetOfficer = ({ name, handleCloseSet }) => {
         <Form.Group>
           <Form.Label>Series Year</Form.Label>
           <Form.Control
-            as="select"
-            value={formData.year}
+            value={lastItem.year}
             required
-            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
+            // onChange={(e) => setFormData({ ...formData, year: e.target.value })}
             className={classnames({ "is-invalid": errors.seriesYear })}
+            readOnly
           >
-            <option value="">--Select Series Year--</option>
-            {officerSet.map((year) => (
+            {/* <option selected value={lastItem._id}>{lastItem.year}</option> */}
+            {/* {officerSet.map((year) => (
               <option key={year._id} value={year._id}>
                 {year.year}
               </option>
-            ))}
+            ))} */}
           </Form.Control>
           {errors.seriesYear && (
             <Form.Control.Feedback type="invalid">

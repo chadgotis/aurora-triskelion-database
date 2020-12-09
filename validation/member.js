@@ -52,9 +52,6 @@ module.exports = function validateMemberInput(data) {
   if (!Validator.isLength(data.masterInitiator, { min: 2, max: 30 })) {
     errors.masterInitiator = "Name must be at least 2 characters long";
   }
-  if (!Validator.isLength(data.batchName, { min: 2, max: 30 })) {
-    errors.batchName = "Batch Name must be at least 2 characters long";
-  }
   if (!Validator.isLength(data.alias, { min: 2, max: 30 })) {
     errors.alias = "Name must be at least 2 characters long";
   }

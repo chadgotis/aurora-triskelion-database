@@ -10,6 +10,7 @@ const MemberForm = ({ handleClose }) => {
 
   const errors = useSelector((state) => state.errors);
   const councilList = useSelector((state) => state.councilList);
+  const account = useSelector((state) => state.auth.user);
 
   const [member, setMember] = useState({
     firstName: "",
@@ -49,7 +50,7 @@ const MemberForm = ({ handleClose }) => {
       chapter: member.chapter,
     };
 
-    dispatch(addMember(newMember, handleClose));
+    dispatch(addMember(newMember, handleClose, account));
   };
 
   useEffect(() => {

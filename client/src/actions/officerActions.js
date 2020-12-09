@@ -23,7 +23,7 @@ export const getSetOfOfficers = () => async (dispatch) => {
   }
 };
 
-export const createNewOfficers = (userData, handleClose) => async (
+export const createNewOfficers = (userData, handleClose, account) => async (
   dispatch
 ) => {
   try {
@@ -38,12 +38,17 @@ export const createNewOfficers = (userData, handleClose) => async (
     dispatch(getSetOfOfficers());
 
     dispatch({ type: CLEAR_ERRORS });
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Created APC set of Officers year: '${userData.year}' `,
+    };
+    await axios.post(`/api/events/create`, newEvent);
   } catch (error) {
     dispatch({ type: GET_ERRORS, payload: error.response.data });
   }
 };
 
-export const deleteOfficers = (id) => async (dispatch) => {
+export const deleteOfficers = (id, name, account) => async (dispatch) => {
   try {
     const result = await Swal.fire({
       title: "Remove set of Officers?",
@@ -58,6 +63,11 @@ export const deleteOfficers = (id) => async (dispatch) => {
       dispatch({ type: CLEAR_ERRORS });
       Swal.fire("Success!", "Removed Successfully", "success");
       dispatch(getSetOfOfficers());
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Removed Set of Officers year: '${name}' `,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({
@@ -80,9 +90,11 @@ export const getSingleSet = (id) => async (dispatch) => {
   }
 };
 
-export const updateSetOfOfficers = (formData, handleCloseSet) => async (
-  dispatch
-) => {
+export const updateSetOfOfficers = (
+  formData,
+  handleCloseSet,
+  account
+) => async (dispatch) => {
   try {
     const officers = {};
     if (formData.position === "") {
@@ -131,6 +143,11 @@ export const updateSetOfOfficers = (formData, handleCloseSet) => async (
       await axios.post(`/api/officers/edit/${formData.year}`, officers);
       Swal.fire("Success!", "Set as Officer Successfully", "success");
       handleCloseSet();
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Set APC Officer named: '${formData.name}' as '${formData.position}' `,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({

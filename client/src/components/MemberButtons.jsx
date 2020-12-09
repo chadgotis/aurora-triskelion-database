@@ -20,6 +20,8 @@ const MemberButtons = ({ id, values }) => {
   const handleShow = () => setShow(true);
 
   const isUser = useSelector((state) => state.auth.user.role);
+  const account = useSelector((state) => state.auth.user);
+  const name = `${values.firstName} ${values.middleName} ${values.lastName}`;
   return (
     <>
       <Modal
@@ -52,7 +54,7 @@ const MemberButtons = ({ id, values }) => {
             <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
               <Button
                 variant="danger"
-                onClick={() => dispatch(removeMember(id))}
+                onClick={() => dispatch(removeMember(id, name, account))}
               >
                 {" "}
                 <i className="fas fa-trash"></i>

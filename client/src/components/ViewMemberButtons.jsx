@@ -12,7 +12,13 @@ import SetChapterOfficer from "./SetChapterOfficer";
 import SetCouncilOfficer from "./SetCouncilOfficer";
 import ColForm from "./ColForm";
 
-const ViewMemberButtons = ({ editSwal, handleShowSet, name, values }) => {
+const ViewMemberButtons = ({
+  editSwal,
+  handleShowSet,
+  name,
+  values,
+  latest,
+}) => {
   const [show, setShow] = useState(false);
   const [showChap, setShowChap] = useState(false);
   const [showPrint, setShowPrint] = useState(false);
@@ -84,7 +90,7 @@ const ViewMemberButtons = ({ editSwal, handleShowSet, name, values }) => {
           <Modal.Title>Print COL</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ColForm values={values} />
+          <ColForm values={values} latest={latest} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClosePrint}>

@@ -38,7 +38,9 @@ export const getSingleCouncil = (id) => async (dispatch) => {
   }
 };
 
-export const createCouncil = (data, handleClose) => async (dispatch) => {
+export const createCouncil = (data, handleClose, account) => async (
+  dispatch
+) => {
   try {
     await axios.post("/api/councils/add", data);
     Swal.fire({
@@ -48,6 +50,11 @@ export const createCouncil = (data, handleClose) => async (dispatch) => {
     });
     handleClose();
     dispatch(councilAction());
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Added new council named '${data.name}' with council code of: ${data.code} `,
+    };
+    await axios.post(`/api/events/create`, newEvent);
   } catch (error) {
     dispatch({
       type: GET_ERRORS,
@@ -56,7 +63,7 @@ export const createCouncil = (data, handleClose) => async (dispatch) => {
   }
 };
 
-export const deleteCouncil = (id) => async (dispatch) => {
+export const deleteCouncil = (id, name, account) => async (dispatch) => {
   try {
     const result = await Swal.fire({
       title: "Remove Council?",
@@ -66,23 +73,31 @@ export const deleteCouncil = (id) => async (dispatch) => {
       cancelButtonColor: "#d33",
       confirmButtonText: "REMOVE",
     });
+
     if (result.isConfirmed) {
       await axios.delete(`/api/councils/delete/${id}`);
       dispatch({ type: CLEAR_ERRORS });
       Swal.fire("Success!", "Removed Successfully", "success");
       dispatch(councilAction());
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Removed council named '${name}' `,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({
       title: "Ooops!",
-      icon: "Error",
+      icon: "error",
       text: `Ooops. Something went wrong`,
     });
-    dispatch({ type: GET_ERRORS, payload: error.response.data });
+    // dispatch({ type: GET_ERRORS, payload: error.response.data });
   }
 };
 
-export const createChapter = (formData, handleClose) => async (dispatch) => {
+export const createChapter = (formData, handleClose, account) => async (
+  dispatch
+) => {
   try {
     const result = await Swal.fire({
       title: "Add Chapter?",
@@ -98,13 +113,20 @@ export const createChapter = (formData, handleClose) => async (dispatch) => {
       Swal.fire("Success!", "Added Successfully", "success");
       handleClose();
       dispatch(getSingleCouncil(formData.c_id));
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Created Chapter : '${formData.name}'`,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     dispatch({ type: GET_ERRORS, payload: error.response.data });
   }
 };
 
-export const deleteChapter = (council_id, chapter_id) => async (dispatch) => {
+export const deleteChapter = (council_id, chapter_id, name, account) => async (
+  dispatch
+) => {
   try {
     const result = await Swal.fire({
       title: "Remove Chapter?",
@@ -121,6 +143,11 @@ export const deleteChapter = (council_id, chapter_id) => async (dispatch) => {
       Swal.fire("Success!", "Removed Successfully", "success");
 
       dispatch(getSingleCouncil(council_id));
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Removed chapter named '${name}' `,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({
@@ -132,9 +159,11 @@ export const deleteChapter = (council_id, chapter_id) => async (dispatch) => {
   }
 };
 
-export const editCouncilOfficers = (formData, handleCloseCouncil) => async (
-  dispatch
-) => {
+export const editCouncilOfficers = (
+  formData,
+  handleCloseCouncil,
+  account
+) => async (dispatch) => {
   try {
     const officers = {};
 
@@ -171,6 +200,11 @@ export const editCouncilOfficers = (formData, handleCloseCouncil) => async (
 
     Swal.fire("Success!", "Success", "success");
     handleCloseCouncil();
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Set Council officer: '${formData.name}' as ${formData.position}`,
+    };
+    await axios.post(`/api/events/create`, newEvent);
   } catch (error) {
     Swal.fire({
       title: "Ooops!",
@@ -195,9 +229,11 @@ export const getSingleChapter = (council_id, chapter_id) => async (
   }
 };
 
-export const editChapterOfficer = (formData, handleCloseChap) => async (
-  dispatch
-) => {
+export const editChapterOfficer = (
+  formData,
+  handleCloseChap,
+  account
+) => async (dispatch) => {
   try {
     const officer = {};
     if (formData.position === "Grand Triskelion")
@@ -220,6 +256,11 @@ export const editChapterOfficer = (formData, handleCloseChap) => async (
     );
     Swal.fire("Success!", "Success", "success");
     handleCloseChap();
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Set Chapter officer: '${formData.name}' as ${formData.position}`,
+    };
+    await axios.post(`/api/events/create`, newEvent);
   } catch (error) {
     Swal.fire({
       title: "Ooops!",

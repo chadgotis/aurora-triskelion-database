@@ -4,6 +4,8 @@ import classnames from "classnames";
 import { useDispatch, useSelector } from "react-redux";
 import { getSingleCouncil } from "../actions/councilActions";
 import { updateMember } from "../actions/memberActions";
+
+import { getLatestSetOfOfficers } from "../actions/officerActions";
 import Swal from "sweetalert2";
 import SetOfficer from "./SetOfficer";
 import ViewMemberButtons from "./ViewMemberButtons";
@@ -19,6 +21,7 @@ const ViewMember = ({ handleClose, values }) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
+  const account = useSelector((state) => state.auth.user);
   const {
     firstName,
     middleName,
@@ -40,6 +43,8 @@ const ViewMember = ({ handleClose, values }) => {
   const errors = useSelector((state) => state.errors);
   const isUser = useSelector((state) => state.auth.user.role);
   const councilList = useSelector((state) => state.councilList);
+
+  const latest = useSelector((state) => state.officers.latest);
   const [edit, setEdit] = useState(false);
 
   const [member, setMember] = useState({
@@ -78,9 +83,10 @@ const ViewMember = ({ handleClose, values }) => {
       masterInitiator: member.masterInitiator,
       batchName: member.batchName,
       alias: member.alias,
+      chapter: member.chapter,
     };
 
-    dispatch(updateMember(updatedValues, values._id, handleClose));
+    dispatch(updateMember(updatedValues, values._id, handleClose, account));
   };
 
   const editSwal = async () => {
@@ -106,6 +112,7 @@ const ViewMember = ({ handleClose, values }) => {
 
   useEffect(() => {
     dispatch(getSingleCouncil(values.municipalCouncil._id));
+    dispatch(getLatestSetOfOfficers());
   }, [dispatch, values.municipalCouncil._id]);
 
   return (
@@ -142,6 +149,7 @@ const ViewMember = ({ handleClose, values }) => {
                 handleShowSet={handleShowSet}
                 name={fullName}
                 values={values}
+                latest={latest}
               />
             </Col>
           )}
@@ -326,9 +334,7 @@ const ViewMember = ({ handleClose, values }) => {
             onChange={(e) => setMember({ ...member, chapter: e.target.value })}
             className={classnames({ "is-invalid": errors.rootChapter })}
           >
-            <option value={values.municipalCouncil.chapters[0].name}>
-              {values.municipalCouncil.chapters[0].name}
-            </option>
+            <option value={member.chapter}>{member.chapter}</option>
             {councilList.councils
               .filter((council) => {
                 return council._id === member.municipalCouncil;

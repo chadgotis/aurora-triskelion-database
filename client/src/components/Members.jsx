@@ -33,12 +33,13 @@ const Members = () => {
       text: "T-ID",
     },
     {
-      dataField: "firstName",
-      text: "First",
+      dataField: "triskelionBirth",
+      text: "T-Birth",
+      sort: true,
     },
     {
-      dataField: "middleName",
-      text: "Middle",
+      dataField: "firstName",
+      text: "First",
     },
     {
       dataField: "lastName",

@@ -10,6 +10,7 @@ import { createNewOfficers } from "../actions/officerActions";
 
 const OfficersForm = ({ handleClose }) => {
   const errors = useSelector((state) => state.errors);
+  const account = useSelector((state) => state.auth.user);
   const [year, setYear] = useState("");
   const d = new Date();
   const dispatch = useDispatch();
@@ -22,7 +23,7 @@ const OfficersForm = ({ handleClose }) => {
     const newSet = {
       year,
     };
-    dispatch(createNewOfficers(newSet, handleClose));
+    dispatch(createNewOfficers(newSet, handleClose, account));
   };
   return (
     <>

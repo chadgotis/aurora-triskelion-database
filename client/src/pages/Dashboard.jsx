@@ -2,9 +2,10 @@ import React, { useEffect } from "react";
 import { Breadcrumb, Row } from "react-bootstrap";
 import CardDash from "../components/CardDash";
 import Recent from "../components/Recent";
-import SystemLogs from "../components/SystemLogs";
+// import SystemLogs from "../components/SystemLogs";
 import { useDispatch, useSelector } from "react-redux";
 import { listMembers, getLatestAddedMember } from "../actions/memberActions";
+// import { getEvents } from "../actions/eventActions";
 import { councilAction } from "../actions/councilActions";
 
 const Dashboard = () => {
@@ -14,6 +15,8 @@ const Dashboard = () => {
   const councils = useSelector((state) => state.councilList);
   const councilLoading = useSelector((state) => state.councilList.loading);
   const memberLoading = useSelector((state) => state.memberList.loading);
+  // const events = useSelector((state) => state.events);
+  // const eventsList = useSelector((state) => state.events.eventList);
 
   const latest = members.latest;
 
@@ -24,6 +27,8 @@ const Dashboard = () => {
     return member.sex === "Female";
   });
   useEffect(() => {
+    //! eventList is being deleted when fetching
+    // dispatch(getEvents());
     dispatch(listMembers());
     dispatch(councilAction());
     dispatch(getLatestAddedMember());
@@ -60,9 +65,9 @@ const Dashboard = () => {
           councilLoading={councilLoading}
         />
       </Row>
-      <Row lg={2}>
+      <Row>
         <Recent latest={latest} memberLoading={memberLoading} />
-        <SystemLogs />
+        {/* <SystemLogs eventsList={eventsList} eventLoading={events.loading} /> */}
       </Row>
     </>
   );

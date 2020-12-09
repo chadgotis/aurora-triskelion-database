@@ -19,6 +19,7 @@ import About from "./pages/About";
 import Settings from "./pages/Settings";
 import Accounts from "./pages/Accounts";
 import OfficerScreen from "./pages/OfficerScreen";
+import Logs from "./pages/Logs";
 import MunicipalCouncilSreen from "./pages/MunicipalCouncilSreen";
 import ChapterScreen from "./pages/ChapterScreen";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
@@ -56,6 +57,7 @@ const App = () => {
               <PrivateRoute path="/reports" exact component={Reports} />
               <PrivateRoute path="/about" exact component={About} />
               <PrivateRoute path="/settings" exact component={Settings} />
+              <PrivateRoute path="/logs" exact component={Logs} />
               <PrivateRoute
                 path="/settings/council/:council_id/:chapter_id"
                 component={ChapterScreen}

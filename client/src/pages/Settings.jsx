@@ -3,7 +3,7 @@ import { Row, Col, Breadcrumb } from "react-bootstrap";
 import SettingsCouncilList from "../components/SettingsCouncilList";
 import SettingsOfficers from "../components/SettingsOfficers";
 import SystemInfo from "../components/SystemInfo";
-import ImportExport from "../components/ImportExport";
+// import ImportExport from "../components/ImportExport";
 
 const Settings = () => {
   return (
@@ -17,7 +17,7 @@ const Settings = () => {
       </Row>
       <Row>
         <Col>
-          <ImportExport />
+          {/* <ImportExport /> */}
           <SystemInfo />
         </Col>
         <Col>

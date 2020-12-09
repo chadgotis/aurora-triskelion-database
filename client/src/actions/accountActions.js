@@ -26,9 +26,12 @@ export const getUserAccounts = (role) => async (dispatch) => {
   }
 };
 
-export const createUserAccount = (userData, handleClose, role) => async (
-  dispatch
-) => {
+export const createUserAccount = (
+  userData,
+  handleClose,
+  role,
+  account
+) => async (dispatch) => {
   try {
     // dispatch({ type: ADD_ACCOUNT_REQUEST });
     await axios.post("/api/accounts/register", userData);
@@ -38,6 +41,11 @@ export const createUserAccount = (userData, handleClose, role) => async (
       icon: "success",
       html: `<p>Remember these credentials. Password can be ONLY viewed ONCE.</p><h3>Username: ${userData.username}</h3><h3>Password: ${userData.password}</h3>`,
     });
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Added new '${userData.type}' account with username of: ${userData.username} `,
+    };
+    await axios.post(`/api/logs/create`, newEvent);
     handleClose();
     dispatch(getUserAccounts(role));
   } catch (error) {

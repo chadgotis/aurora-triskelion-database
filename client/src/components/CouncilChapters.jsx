@@ -22,9 +22,10 @@ const CouncilChapters = ({ chapters, councilId }) => {
   const dispatch = useDispatch();
 
   const isSuperAdmin = useSelector((state) => state.auth.user.role);
+  const account = useSelector((state) => state.auth.user);
 
-  const deleteHandler = (id) => {
-    dispatch(deleteChapter(councilId, id));
+  const deleteHandler = (id, name, account) => {
+    dispatch(deleteChapter(councilId, id, name, account));
   };
 
   if (!chapters) {
@@ -96,7 +97,9 @@ const CouncilChapters = ({ chapters, councilId }) => {
                         <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
                           <Button
                             variant="danger"
-                            onClick={() => deleteHandler(chapter._id)}
+                            onClick={() =>
+                              deleteHandler(chapter._id, chapter.name, account)
+                            }
                           >
                             {" "}
                             <i className="fas fa-trash"></i>

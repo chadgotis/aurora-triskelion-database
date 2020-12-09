@@ -13,7 +13,9 @@ router.get(
   "/",
   passport.authenticate("jwt", { session: false }),
   async (req, res) => {
-    const members = await Member.find().populate("municipalCouncil");
+    const members = await Member.find()
+      .populate("municipalCouncil")
+      .sort({ createdAt: -1 });
     try {
       res.json(members);
     } catch (error) {

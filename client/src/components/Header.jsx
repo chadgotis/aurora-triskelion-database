@@ -32,6 +32,11 @@ const Header = () => {
             <i className="fas fa-cogs"></i> System Settings
           </Nav.Link>
         </LinkContainer>
+        <LinkContainer to="/logs">
+          <Nav.Link>
+            <i className="fas fa-cogs"></i> Logs
+          </Nav.Link>
+        </LinkContainer>
         <LinkContainer to="/about">
           <Nav.Link>
             <i className="fas fa-info-circle"></i> About

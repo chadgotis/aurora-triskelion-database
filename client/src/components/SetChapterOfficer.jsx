@@ -11,6 +11,7 @@ const SetChapterOfficer = ({ name, handleCloseChap }) => {
   const councilSet = useSelector((state) => state.councilList.councils);
 
   const councilList = useSelector((state) => state.councilList);
+  const account = useSelector((state) => state.auth.user);
   const errors = {};
 
   const [formData, setFormData] = useState({
@@ -21,7 +22,7 @@ const SetChapterOfficer = ({ name, handleCloseChap }) => {
   });
 
   const submitHandler = () => {
-    dispatch(editChapterOfficer(formData, handleCloseChap));
+    dispatch(editChapterOfficer(formData, handleCloseChap, account));
   };
 
   return (

@@ -8,6 +8,7 @@ const CreateAccount = ({ handleClose }) => {
   const errors = useSelector((state) => state.accounts.errors);
   const isSuperAdmin = useSelector((state) => state.auth.user.role);
   const role = useSelector((state) => state.auth.user.role);
+  const account = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
 
   const [user, setUser] = useState({
@@ -28,7 +29,7 @@ const CreateAccount = ({ handleClose }) => {
       password: pass,
       type: user.type,
     };
-    dispatch(createUserAccount(newAccount, handleClose, role));
+    dispatch(createUserAccount(newAccount, handleClose, role, account));
   };
 
   const generateRandomPass = () => {

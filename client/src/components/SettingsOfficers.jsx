@@ -22,13 +22,15 @@ const SettingsOfficers = () => {
 
   const isSuperAdmin = useSelector((state) => state.auth.user.role);
 
+  const account = useSelector((state) => state.auth.user);
+
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const deleteHandler = (id) => {
-    dispatch(deleteOfficers(id));
+  const deleteHandler = (id, name, account) => {
+    dispatch(deleteOfficers(id, name, account));
   };
 
   useEffect(() => {
@@ -113,7 +115,13 @@ const SettingsOfficers = () => {
                           <OverlayTrigger overlay={<Tooltip>Remove</Tooltip>}>
                             <Button
                               variant="danger"
-                              onClick={() => deleteHandler(officer._id)}
+                              onClick={() =>
+                                deleteHandler(
+                                  officer._id,
+                                  officer.year,
+                                  account
+                                )
+                              }
                             >
                               {" "}
                               <i className="fas fa-trash"></i>

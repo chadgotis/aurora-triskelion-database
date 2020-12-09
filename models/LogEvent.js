@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-//1 year in Seconds
-const expirationTime = 31556952;
+// //1 year in Seconds
+// const expirationTime = 31556952;
 
 const logEventSchema = new Schema({
   user: {
@@ -17,7 +17,6 @@ const logEventSchema = new Schema({
   createdAt: {
     type: "Date",
     default: Date.now,
-    expires: expirationTime,
   },
 });
 

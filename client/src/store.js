@@ -7,6 +7,7 @@ import { getErrors } from "./reducers/errorReducers";
 import { councilReducer } from "./reducers/councilReducers";
 import { getAccountReducer } from "./reducers/accountReducers";
 import { setOfOfficersReducer } from "./reducers/officerReducers";
+import { eventReducer } from "./reducers/eventReducer";
 
 const reducer = combineReducers({
   memberList: memberListReducers,
@@ -15,6 +16,7 @@ const reducer = combineReducers({
   councilList: councilReducer,
   accounts: getAccountReducer,
   officers: setOfOfficersReducer,
+  events: eventReducer,
 });
 
 const initialState = {};

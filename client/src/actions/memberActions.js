@@ -35,7 +35,9 @@ export const listMembers = () => async (dispatch) => {
   }
 };
 
-export const addMember = (memberData, handleClose) => async (dispatch) => {
+export const addMember = (memberData, handleClose, account) => async (
+  dispatch
+) => {
   try {
     dispatch({ type: MEMBER_ADD_REQUEST });
 
@@ -63,6 +65,11 @@ export const addMember = (memberData, handleClose) => async (dispatch) => {
       dispatch(listMembers());
 
       handleClose();
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Added Member named '${memberData.firstName} ${memberData.middleName} ${memberData.lastName}' to ${memberData.chapter} chapter`,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({
@@ -77,7 +84,7 @@ export const addMember = (memberData, handleClose) => async (dispatch) => {
   }
 };
 
-export const removeMember = (id) => async (dispatch) => {
+export const removeMember = (id, name, account) => async (dispatch) => {
   try {
     const result = await Swal.fire({
       title: "Remove member?",
@@ -89,13 +96,17 @@ export const removeMember = (id) => async (dispatch) => {
       confirmButtonText: "REMOVE",
     });
     if (result.isConfirmed) {
-      const { data } = await axios.delete(`/api/members/delete/${id}`);
+      await axios.delete(`/api/members/delete/${id}`);
 
-      console.log(data);
       dispatch({ type: CLEAR_ERRORS });
       Swal.fire("Success!", "Removed Successfully", "success");
       dispatch(listMembers());
       dispatch({ type: CLEAR_ERRORS });
+      const newEvent = {
+        user: `${account.firstName} ${account.lastName}`,
+        activity: `Removed member named '${name}' `,
+      };
+      await axios.post(`/api/events/create`, newEvent);
     }
   } catch (error) {
     Swal.fire({
@@ -110,7 +121,7 @@ export const removeMember = (id) => async (dispatch) => {
   }
 };
 
-export const updateMember = (memberData, id, handleClose) => async (
+export const updateMember = (memberData, id, handleClose, account) => async (
   dispatch
 ) => {
   try {
@@ -121,6 +132,11 @@ export const updateMember = (memberData, id, handleClose) => async (
     });
 
     dispatch(listMembers());
+    const newEvent = {
+      user: `${account.firstName} ${account.lastName}`,
+      activity: `Updated member named '${memberData.firstName} ${memberData.middleName} ${memberData.lastName}' `,
+    };
+    await axios.post(`/api/events/create`, newEvent);
   } catch (error) {
     Swal.fire({
       icon: "error",
